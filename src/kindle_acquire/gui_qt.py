@@ -43,8 +43,8 @@ STYLE = """
 QWidget { font-family: "Segoe UI"; font-size: 10.5pt; color: %(text)s; }
 QMainWindow, QWidget#page, QStackedWidget { background: %(main)s; }
 QFrame#side { background: %(panel)s; }
-QLabel#logo { font-size: 24pt; font-weight: 600; color: #ffffff; }
-QLabel#logoSub { color: %(muted)s; font-size: 9.5pt; }
+QLabel#logo { font-size: 22pt; font-weight: 600; color: #ffffff; }
+QLabel#logoSub { color: %(muted)s; font-size: 9pt; }
 QLabel#sideHead { color: %(muted)s; font-size: 9pt; }
 QLabel#device { font-family: %(mono)s; font-size: 10pt; }
 QLabel#crumb { color: %(muted)s; font-size: 10pt; }
@@ -240,9 +240,27 @@ class Window(QtWidgets.QMainWindow):
         layout = QtWidgets.QVBoxLayout(side)
         layout.setContentsMargins(24, 22, 20, 18)
         layout.setSpacing(4)
-        layout.addWidget(_label("KEAT", "logo"))
-        layout.addWidget(_label("Kindle E-Reader Acquisition Tool", "logoSub"))
-        layout.addSpacing(22)
+        head = QtWidgets.QHBoxLayout()
+        head.setSpacing(14)
+        badge = QtWidgets.QLabel()
+        pixmap = QtGui.QPixmap(jobs.asset("keat.png"))
+        if not pixmap.isNull():
+            ratio = self.devicePixelRatioF()
+            pixmap = pixmap.scaled(int(64 * ratio), int(64 * ratio),
+                                   Qt.AspectRatioMode.KeepAspectRatio,
+                                   Qt.TransformationMode.SmoothTransformation)
+            pixmap.setDevicePixelRatio(ratio)
+            badge.setPixmap(pixmap)
+            head.addWidget(badge)
+        words = QtWidgets.QVBoxLayout()
+        words.setSpacing(0)
+        words.addStretch(1)
+        words.addWidget(_label("KEAT", "logo"))
+        words.addWidget(_label("Kindle E-Reader\nAcquisition Tool", "logoSub"))
+        words.addStretch(1)
+        head.addLayout(words, 1)
+        layout.addLayout(head)
+        layout.addSpacing(20)
         self.device_text = _label("", "device")
         self.device_text.setTextFormat(Qt.TextFormat.RichText)
         self.device_text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
@@ -824,8 +842,8 @@ class Window(QtWidgets.QMainWindow):
         self.view.horizontalHeader().setSortIndicator(-1, Qt.SortOrder.AscendingOrder)
         self.view.resizeColumnsToContents()
         for column in range(len(columns)):
-            if self.view.columnWidth(column) > 380:
-                self.view.setColumnWidth(column, 380)
+            if self.view.columnWidth(column) > 240:
+                self.view.setColumnWidth(column, 240)
         self.detail.clear()
         self._apply_filter(self.filter_box.text())
 
@@ -867,12 +885,16 @@ def _dark_palette():
 
 
 def apply_style(app):
+    icon = QtGui.QIcon(jobs.asset("keat.png"))
+    if not icon.isNull():
+        app.setWindowIcon(icon)
     app.setStyle("Fusion")
     app.setPalette(_dark_palette())
     app.setStyleSheet(STYLE)
 
 
 def main():
+    jobs.set_app_id()
     app = QtWidgets.QApplication.instance() or QtWidgets.QApplication(sys.argv)
     apply_style(app)
     window = Window()

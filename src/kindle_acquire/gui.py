@@ -4,6 +4,7 @@ Runs the same functions as the command line. Long operations run on a
 worker thread and report progress through util.PROGRESS_HOOK.
 """
 
+import ctypes
 import os
 import queue
 import threading
@@ -419,12 +420,17 @@ class App:
 
 
 def main():
+    jobs.set_app_id()
     if os.name == "nt":
         try:
             ctypes.windll.shcore.SetProcessDpiAwareness(1)
         except (AttributeError, OSError):
             pass
     root = tk.Tk()
+    try:
+        root.iconbitmap(jobs.asset("keat.ico"))
+    except tk.TclError:
+        pass
     App(root)
     root.mainloop()
     return 0

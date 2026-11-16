@@ -29,3 +29,6 @@ keat-gui = "kindle_acquire.cli:open_window"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+kindle_acquire = ["assets/*"]

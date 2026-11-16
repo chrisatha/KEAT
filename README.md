@@ -1,97 +1,171 @@
+<p align="center">
+  <img src="src/kindle_acquire/assets/keat.png" alt="KEAT logo" width="200">
+</p>
+
 # KEAT
 
-Kindle E-Reader Acquisition Tool. Forensic acquisition of Amazon Kindle
-e-readers. The command and the Python package are named `kindle-acquire`
-and `kindle_acquire`. `keat` runs the same command.
+**Kindle E-Reader Acquisition Tool.** Forensic acquisition and parsing of
+Amazon Kindle e-readers.
 
-The tool copies a Kindle's user storage with a hash for every file, or
-images the storage disk sector by sector. It then parses the records an
-examiner usually needs: highlights, notes, bookmarks, reading positions,
-dictionary lookups, loaded documents and reading statistics.
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue)
+![Platform: Windows](https://img.shields.io/badge/platform-Windows-lightgrey)
+
+KEAT images a Kindle's storage, extracts its files and deleted entries
+from the image, and parses the records an examiner usually needs:
+highlights, notes, bookmarks, reading positions, dictionary lookups,
+loaded documents and reading statistics.
 
 It copies data as stored. It does not remove, bypass or decrypt DRM.
-Protected books are copied and identified as protected. They are not opened.
+Protected books are copied and labelled as protected. They are not opened.
 
-Status: early. Tested on one device (see "Tested devices"). Python 3.8 or
-later, Windows, standard library only.
+![Main menu](docs/screenshots/main-menu.png)
 
-## Commands
+*All screenshots show invented data. `tools/make_screenshots.py` rebuilds
+them from a synthetic image.*
+
+## Contents
+
+- [What it does](#what-it-does)
+- [What it recovers](#what-it-recovers)
+- [Install](#install)
+- [The window](#the-window)
+- [Recommended sequence](#recommended-sequence)
+- [Command line](#command-line)
+- [Output](#output)
+- [Write protection](#write-protection)
+- [Times](#times)
+- [Limits](#limits)
+- [Tested devices](#tested-devices)
+- [Tests](#tests)
+- [Licence and credits](#licence-and-credits)
+
+## What it does
+
+| Step | Result |
+| --- | --- |
+| **Detect** | Finds the Kindle by Amazon's USB vendor ID. Reports serial number, disk, volume, and whether the host can write to the device |
+| **Image** | Raw image of the storage disk with MD5, SHA-1 and SHA-256. The image file is read back and compared. The device can be read a second time and compared again |
+| **Extract** | Reads the FAT32 file system inside the image with KEAT's own reader. Writes every allocated file with hashes, lists deleted entries, and reads deleted files back where their clusters are still unallocated |
+| **Copy** | Hashed copy of every file from a mounted volume, for when imaging is not possible |
+| **Verify** | Re-hashes an acquisition against its own records and reports changed, missing and added files |
+| **Parse** | Decodes the device's records into one SQLite file and one CSV per table. Optional matching against a set of known hashes |
+
+Every file, folder and error gets a row in a manifest. Nothing is skipped
+silently. Each run writes a log with the tool version, host, device, case
+fields, counts and hashes.
+
+The acquisition code uses the Python standard library only.
+
+## What it recovers
+
+| Record | Source on the device |
+| --- | --- |
+| Highlights, notes and bookmarks with created and modified times | Sidecar files beside each book or document (`.yjr`, `.yjf`, `.pds`, `.pdt`, `.azw3r` and others) |
+| Annotations from books no longer on the device | Deleted sidecar files read back from the image |
+| Last page read and other reading positions, with times | Sidecar files |
+| The running log of highlights, notes and bookmarks | `My Clippings.txt` |
+| Dictionary lookups with the sentence and the book | `system/vocabulary/vocab.db` |
+| Loaded books, PDFs and audio files with hashes, container type and the identifier in the file name | `documents/`, `audible/` |
+| Reading statistics and queued device activity records | `system/freetime/`, `system/fmcache/` |
+| Deleted file and folder names, sizes, times and first cluster | FAT32 directory entries in the image |
+| Every other SQLite database found, with tables and row counts | Whole volume |
+
+## Install
+
+KEAT needs Python 3.8 or later on Windows.
 
 ```
-kindle-acquire detect
-kindle-acquire logical --out <folder> [--case C] [--evidence E] [--examiner N]
-kindle-acquire image   --out <folder> [--verify-source]        (administrator)
-kindle-acquire extract <image folder or image file> --out <folder>
-kindle-acquire verify  <acquisition folder>
-kindle-acquire parse   <logical or extracted folder> [--known <folder or hash list>]
+git clone https://github.com/chrisatha/KEAT.git
+cd KEAT
+pip install .[gui]
 ```
 
-The recommended sequence for evidence is write blocker, `image`, `extract`,
-`parse`. After `image` the device is not needed again.
+`[gui]` adds PySide6 for the Qt window. Leave it off and KEAT has no
+third-party dependency: the command line works and the window falls back
+to Tkinter.
 
-Run from a checkout without installing:
+To run from a checkout without installing:
 
 ```
 set PYTHONPATH=src
 python -m kindle_acquire detect
 ```
 
-## Window
+The command is `kindle-acquire`. `keat` runs the same command.
+
+## The window
 
 Double-click `kindle-acquire-gui.pyw`, or run `kindle-acquire gui`.
 
-There are two windows over the same functions:
+Device details stay in the panel on the left: serial number, disk, volume
+and whether writes to the device are blocked. The right side is a menu of
+actions with a description beside each.
 
-- The **Qt window** opens when PySide6 or PyQt6 is installed
-  (`pip install PySide6`, or `pip install .[gui]`). Device details sit in
-  a panel on the left. The right side is a menu of actions with a
-  description beside each, a second menu for work on existing
-  acquisitions, and a progress screen while a step runs. The layout
-  follows the UFADE and ALEX extraction tools by Christian Peter. No code
-  or assets from those projects are used. **View Results** opens
-  `kindle_parsed.db`: pick a table, filter rows, sort by a column, and
-  select a row to read every column in full.
-- The **Tkinter window** opens otherwise, or with `kindle-acquire gui --tk`.
-  It needs nothing beyond Python.
+- **Full Acquisition** images the disk, extracts from the image and
+  parses the result, in that order. It stops at the first failure.
+- **Image the Disk** needs administrator rights. The window offers to
+  restart itself elevated. The device is detected again when the step
+  starts, and the step stops if that Kindle is no longer connected.
+- **Copy from Mounted Volume** warns first when the volume is mounted
+  read-write.
+- **Case and Output** holds the case number, evidence item, examiner,
+  output folder and known hashes.
 
-Qt is used by the window only. The acquisition code stays on the
-standard library.
+![Case and Output](docs/screenshots/case-and-output.png)
 
-The window shows the connected device and its write-protection state,
-takes the case fields and an output folder, and names each output folder
-from the evidence item, the action and the time.
+**Switch to File Operations** shows the steps that work on an existing
+acquisition.
 
-- **Full acquisition** images the disk, extracts from the image and parses
-  the result, in that order, and stops at the first failure.
-- **Image the disk** needs administrator rights. The window offers to
-  restart itself elevated. The device is detected again when the action
-  starts, and the action stops if that Kindle is no longer connected.
-- **Copy files from the mounted volume** warns first when the volume is
-  mounted read-write.
-- **Extract**, **Parse** and **Verify** ask for an existing acquisition
-  folder. **Known hashes** is passed to Parse.
-- **Cancel** stops a copy, image or extraction. The output folder is left
-  incomplete and has no acquisition log.
+![File operations](docs/screenshots/file-operations.png)
 
-After **Parse** or **Full acquisition** the Qt window's progress screen
-offers **View results**.
+While a step runs, the window shows its progress and log. **Cancel** stops
+a copy, image or extraction. A cancelled run leaves an incomplete folder
+with no acquisition log.
+
+![Progress](docs/screenshots/progress.png)
+
+**View Results** opens `kindle_parsed.db`. Pick a table, filter rows,
+sort by a column, and select a row to read every column in full. The
+`file_state` column separates records from allocated files from records
+read back from deleted files.
+
+![Results](docs/screenshots/results.png)
+
+The Qt window runs on PySide6 or PyQt6. Without either, or with
+`kindle-acquire gui --tk`, a Tkinter window with the same steps opens.
+
+## Recommended sequence
+
+1. Keep the Kindle off Wi-Fi. A sync can remove content that was deleted
+   from the Amazon account.
+2. Connect the Kindle through a hardware USB write blocker.
+3. Run **Full Acquisition**, or `image`, then `extract`, then `parse`.
+4. Run **Verify** on the image and on the extraction before the work
+   leaves the examination computer.
+
+After the image is made the device is not needed again.
+
+## Command line
+
+```
+kindle-acquire detect
+kindle-acquire image   --out <folder> [--verify-source]        (administrator)
+kindle-acquire extract <image folder or image file> --out <folder>
+kindle-acquire logical --out <folder>
+kindle-acquire verify  <acquisition folder>
+kindle-acquire parse   <logical or extracted folder> [--known <folder or hash list>]
+kindle-acquire gui     [--tk]
+```
+
+`image`, `extract` and `logical` take `--case`, `--evidence`, `--examiner`
+and `--notes` for the log.
 
 ### detect
 
 Lists USB devices with Amazon's vendor ID (1949). Reports the serial
 number, the product ID, the disk number and the mounted volume. Reports
 whether the device is a mass-storage disk or an MTP device.
-
-### logical
-
-Copies every file from the mounted volume into `<out>/files`.
-
-- Each file is hashed (SHA-256 and MD5) while it is read from the device.
-- The copy is read back and compared with that hash.
-- `manifest.csv` has one row per file and folder: size, hashes, times,
-  attributes, status. Errors are rows. Nothing is skipped silently.
-- `acquisition_log.json` records the tool version, host, device, case
-  fields, counts, errors and the hash of the manifest.
 
 ### image
 
@@ -124,6 +198,14 @@ acquisition, and `verify` and `parse` work on it.
   a second name that would land on the same output path gets `~2`. The
   manifest row records the name as it is on the volume.
 
+### logical
+
+Copies every file from the mounted volume into `<out>/files`.
+
+- Each file is hashed (SHA-256 and MD5) while it is read from the device.
+- The copy is read back and compared with that hash.
+- Errors are rows in the manifest.
+
 ### verify
 
 Re-hashes an acquisition folder against its own manifest or log. Reports
@@ -132,8 +214,8 @@ Recovered deleted files are included.
 
 ### parse
 
-Reads a logical acquisition (the copies, never the device) and writes
-`parsed/kindle_parsed.db` plus one CSV per table:
+Reads a logical or extracted acquisition (the copies, never the device)
+and writes `parsed/kindle_parsed.db` plus one CSV per table:
 
 | Table | Content |
 | --- | --- |
@@ -155,6 +237,36 @@ recovered deleted file is compared. A match means the content is
 identical. No match does not show the document was never on the device:
 a converted or edited copy has a different hash.
 
+## Output
+
+The window names each output folder from the evidence item, the step and
+the time. On the command line the folder is whatever `--out` names.
+
+An image acquisition:
+
+```
+<evidence>_image_<date>_<time>/
+    <evidence>.dd                  raw image
+    acquisition_log.json           device, case, hashes, unreadable ranges
+    acquisition_log.json.sha256
+```
+
+An extraction or a logical copy:
+
+```
+<evidence>_extract_<date>_<time>/
+    files/                         every allocated file, in its folders
+    deleted/                       deleted files that were read back (extraction only)
+    manifest.csv                   one row per file and folder
+    deleted_entries.csv            one row per deleted entry (extraction only)
+    acquisition_log.json
+    acquisition_log.json.sha256
+    parsed/
+        kindle_parsed.db           every parsed table
+        csv/                       the same tables, one CSV each
+        parse_log.json
+```
+
 ## Write protection
 
 A Kindle in mass-storage mode is a FAT32 disk. Windows writes to a FAT32
@@ -163,12 +275,9 @@ testing, one logical run changed the access date of 2,392 of 2,836
 entries on the device.
 
 For evidence, connect the Kindle through a hardware USB write blocker and
-use `image`. Use `logical` on a mounted volume only when a write blocker
-cannot be used, and say so in the report. `detect` and `logical` report
-whether the host's USB write-protect policy is on.
-
-Keep the device off Wi-Fi. A sync can remove content that was deleted
-from the Amazon account.
+image the disk. Copy from a mounted volume only when a write blocker
+cannot be used, and say so in the report. KEAT reports whether the disk
+is read-only and whether the host's USB write-protect policy is on.
 
 ## Times
 
@@ -178,13 +287,14 @@ Three kinds of time appear in the output. They are not interchangeable.
   own files. These are UTC.
 - `*_stored` in the manifest: the FAT directory time as stored. FAT has no
   time zone. On the tested device the Kindle wrote UTC.
-- `*_utc` in the manifest: the host's conversion of the FAT time. Windows
-  assumes host local time, which shifts a Kindle's times by the host's UTC
-  offset. Prefer `*_stored`.
+- `*_utc` in the manifest of a logical copy: the host's conversion of the
+  FAT time. Windows assumes host local time, which shifts a Kindle's times
+  by the host's UTC offset. Prefer `*_stored`.
 - `added_device_local` in `clippings`: the clock time the device printed,
   in the device's time zone setting.
 
-See `docs/METHOD.md` for how these were established.
+[docs/METHOD.md](docs/METHOD.md) records how each of these was
+established, with the test figures.
 
 ## Limits
 
@@ -195,13 +305,16 @@ See `docs/METHOD.md` for how these were established.
   over USB.
 - Raw images are single-file `dd`. No E01, no split files.
 - `extract` reads FAT32 only. Deleted files stored in more than one run of
-  clusters are not recovered. Unallocated space is not carved. See
-  `docs/METHOD.md` for the limits on deleted names and recovery.
+  clusters are not recovered. Unallocated space is not carved.
+  [docs/METHOD.md](docs/METHOD.md) has the limits on deleted names and
+  recovery.
 - CSV output holds device text unchanged. A cell that starts with `=` is
   a formula to a spreadsheet program. Open the CSV files as text or use
   the SQLite file.
-- The window's image and copy buttons have been run against synthetic
+- The window's image and copy steps have been run against synthetic
   data, not yet against a device. The functions behind them have.
+- KEAT has not yet been tested with the Kindle behind a hardware write
+  blocker. The device tests were made on a direct USB connection.
 - Note text in sidecar files is decoded by position. It is covered by a
   synthetic test and has not been checked against a device that holds notes.
 
@@ -211,10 +324,24 @@ See `docs/METHOD.md` for how these were established.
 | --- | --- | --- | --- | --- | --- |
 | Kindle (model to confirm) | G001PX | 5.19.2 | 1949:0324 | mass storage | logical, image, extract, verify, parse |
 
+On that device the image was read twice with matching hashes, and the
+extraction from the image matched a logical copy for all 2,541 files.
+Reports from other models and firmware versions are welcome.
+
 ## Tests
 
 ```
 python -m unittest discover -s tests
 ```
 
-Tests use synthetic data. Do not add device data to this repository.
+Tests use synthetic data, including FAT32 images built in memory. Do not
+add device data to this repository.
+
+## Licence and credits
+
+MIT. See [LICENSE](LICENSE).
+
+The window's layout follows the UFADE and ALEX extraction tools by
+Christian Peter. No code or assets from those projects are used.
+
+Use KEAT only on devices you are authorised to examine.

@@ -12,6 +12,20 @@ import time
 from pathlib import Path
 
 
+def asset(name):
+    """Path of a file shipped in the package's assets folder."""
+    return str(Path(__file__).resolve().parent / "assets" / name)
+
+
+def set_app_id():
+    """Give the window its own taskbar entry and icon instead of Python's."""
+    if os.name == "nt":
+        try:
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("chrisatha.keat")
+        except (AttributeError, OSError):
+            pass
+
+
 def is_admin():
     if os.name != "nt":
         return os.geteuid() == 0
