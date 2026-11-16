@@ -20,6 +20,8 @@ _EOC = 0x0FFFFFF8
 _BAD = 0x0FFFFFF7
 _READ_MAX = 1024 * 1024
 _FAT_PARTITION_TYPES = (0x0B, 0x0C)
+# FAT32 entries are 28 bits wide and the top values are reserved.
+MAX_CLUSTERS = 0x0FFFFFF5
 # A FAT directory holds at most 65,536 entries of 32 bytes.
 MAX_DIRECTORY_BYTES = 65536 * 32
 
@@ -189,13 +191,23 @@ class Fat32Volume:
         self.fat_size_sectors = fat32_size
         self.cluster_size = self.bytes_per_sector * self.sectors_per_cluster
         self.first_data_sector = self.reserved_sectors + self.fat_count * fat32_size
+        if self.first_data_sector >= self.total_sectors:
+            raise Fat32Error("boot sector describes a volume with no data area")
         self.cluster_count = (self.total_sectors - self.first_data_sector) // self.sectors_per_cluster
+        if self.cluster_count > MAX_CLUSTERS:
+            raise Fat32Error("boot sector claims %d clusters, more than FAT32 allows"
+                             % self.cluster_count)
         serial = struct.unpack_from("<I", boot, 67)[0]
         self.serial = "%04X-%04X" % (serial >> 16, serial & 0xFFFF)
         self.boot_label = boot[71:82].decode("cp437", errors="replace").rstrip(" ")
         self.label = ""
-        fat_bytes = self._read(offset + self.reserved_sectors * self.bytes_per_sector,
-                               fat32_size * self.bytes_per_sector)
+        # Read only the part of the table the volume needs, in whole sectors.
+        # A damaged boot sector cannot make this larger than the FAT32 limit.
+        needed = (self.cluster_count + 2) * 4
+        needed = -(-needed // self.bytes_per_sector) * self.bytes_per_sector
+        if needed > fat32_size * self.bytes_per_sector:
+            raise Fat32Error("the allocation table is shorter than the volume")
+        fat_bytes = self._read(offset + self.reserved_sectors * self.bytes_per_sector, needed)
         self.fat = array("I")
         self.fat.frombytes(fat_bytes[:len(fat_bytes) // 4 * 4])
         if sys.byteorder == "big":

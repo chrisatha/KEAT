@@ -10,7 +10,6 @@ import hashlib
 import os
 import shutil
 import stat
-from pathlib import Path
 
 from .device import volume_info
 from .util import (CHUNK, hash_file, host_facts, long_path, ns_to_utc,
@@ -24,19 +23,6 @@ MANIFEST_COLUMNS = [
     "status", "detail",
 ]
 
-# Set per run. On a FAT volume the directory entry holds a wall-clock time
-# with no time zone. Windows reads it as host local time, using the host's
-# current offset, and reports UTC. Adding the offset back gives the value
-# as stored. None means the source is not FAT and the columns stay empty.
-_STORED_OFFSET_NS = None
-
-
-def _stored(ns):
-    if _STORED_OFFSET_NS is None:
-        return ""
-    return ns_to_utc(ns + _STORED_OFFSET_NS)[:19]
-
-
 def _attributes(st):
     value = getattr(st, "st_file_attributes", 0)
     names = []
@@ -49,20 +35,36 @@ def _attributes(st):
     return "".join(names)
 
 
-def _row(rel_path, kind, st=None, **extra):
-    row = dict.fromkeys(MANIFEST_COLUMNS, "")
-    row["rel_path"] = rel_path
-    row["type"] = kind
-    if st is not None:
-        row["size"] = st.st_size if kind == "file" else ""
-        row["modified_stored"] = _stored(st.st_mtime_ns)
-        row["created_stored"] = _stored(st.st_ctime_ns)
-        row["accessed_stored"] = _stored(st.st_atime_ns)[:10]
-        row["modified_utc"] = ns_to_utc(st.st_mtime_ns)
-        row["created_utc"] = ns_to_utc(st.st_ctime_ns)
-        row["accessed_utc"] = ns_to_utc(st.st_atime_ns)
-        row["attributes"] = _attributes(st)
-    row.update(extra)
+def _row_maker(stored_offset_ns):
+    """Return the function that builds manifest rows for one run.
+
+    On a FAT volume the directory entry holds a wall-clock time with no
+    time zone. Windows reads it as host local time, using the host's
+    current offset, and reports UTC. Adding the offset back gives the
+    value as stored. With None (the source is not FAT) the *_stored
+    columns stay empty.
+    """
+    def stored(ns):
+        if stored_offset_ns is None:
+            return ""
+        return ns_to_utc(ns + stored_offset_ns)[:19]
+
+    def row(rel_path, kind, st=None, **extra):
+        out = dict.fromkeys(MANIFEST_COLUMNS, "")
+        out["rel_path"] = rel_path
+        out["type"] = kind
+        if st is not None:
+            out["size"] = st.st_size if kind == "file" else ""
+            out["modified_stored"] = stored(st.st_mtime_ns)
+            out["created_stored"] = stored(st.st_ctime_ns)
+            out["accessed_stored"] = stored(st.st_atime_ns)[:10]
+            out["modified_utc"] = ns_to_utc(st.st_mtime_ns)
+            out["created_utc"] = ns_to_utc(st.st_ctime_ns)
+            out["accessed_utc"] = ns_to_utc(st.st_atime_ns)
+            out["attributes"] = _attributes(st)
+        out.update(extra)
+        return out
+
     return row
 
 
@@ -124,13 +126,13 @@ def acquire_logical(source, out_dir, case=None, device=None, quiet=False):
     log["case"] = case or {}
     log["device"] = device
     log["source"] = source
-    global _STORED_OFFSET_NS
-    _STORED_OFFSET_NS = None
+    stored_offset_ns = None
     drive = os.path.splitdrive(source)[0]
     if drive:
         log["source_volume"] = volume_info(drive + "\\")
         if log["source_volume"].get("filesystem", "").upper().startswith("FAT"):
-            _STORED_OFFSET_NS = log["host_utc_offset_seconds"] * 1000000000
+            stored_offset_ns = log["host_utc_offset_seconds"] * 1000000000
+    _row = _row_maker(stored_offset_ns)
     try:
         usage = shutil.disk_usage(source)
         log["source_volume_bytes"] = {"total": usage.total, "used": usage.used,

@@ -121,6 +121,9 @@ def run_image(device, out, case, verify_source, say):
     if verify_source:
         say("Second read of the device matches: %s" % log["source_second_read_matches"])
     say("Unreadable bytes: %d" % log["unreadable_bytes"])
+    if log["status"] == "incomplete":
+        raise RuntimeError("%s. The image holds %d of %d bytes" % (
+            log["stopped_reason"], log["image_size_bytes"], log["source_size_bytes"]))
     if log["status"] != "ok":
         raise RuntimeError("the image needs review, see acquisition_log.json")
     return log
@@ -157,6 +160,36 @@ def run_parse(acquisition, known, say):
     for key, value in summary.items():
         say("  %-*s %s" % (width, key, value))
     return parsed
+
+
+def run_compare(first, second, say):
+    from .compare import compare, describe
+    result = compare(first, second)
+    for line in describe(result).splitlines():
+        say(line)
+    shown = 0
+    for diff in result["differences"]:
+        if shown == 40:
+            say("  ... %d more. Use 'kindle-acquire compare --out' for the full list."
+                % (len(result["differences"]) - shown))
+            break
+        say("  %s: %s (a: %s, b: %s)" % (diff["difference"], diff["rel_path"],
+                                         diff["a"], diff["b"]))
+        shown += 1
+    if not result["same_content"]:
+        raise RuntimeError("the two acquisitions do not hold the same content")
+    return result
+
+
+def run_survey(acquisition, say):
+    """Returns the path of the support profile."""
+    from .survey import survey
+    profile, path = survey(acquisition)
+    say("Support profile written to %s" % path)
+    say("Files: %d. Folders: %d. Kinds of parse error: %d." % (
+        profile["counts"]["files"], profile["counts"]["folders"], len(profile["parse_errors"])))
+    say("It holds structure, not content. Read it before sharing.")
+    return str(path)
 
 
 def run_verify(acquisition, say):

@@ -74,6 +74,18 @@ def _run_powershell(script):
     return proc.stdout
 
 
+def _query():
+    """Run the device query. Every failure becomes a RuntimeError with a reason."""
+    try:
+        return json.loads(_run_powershell(_PS_SCRIPT))
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("device query timed out after 120 seconds")
+    except OSError as exc:
+        raise RuntimeError("device query could not start PowerShell: %s" % exc)
+    except ValueError as exc:
+        raise RuntimeError("device query returned text that is not JSON: %s" % exc)
+
+
 def _as_list(value):
     if value is None:
         return []
@@ -111,7 +123,9 @@ def detect():
     """
     if os.name != "nt":
         raise RuntimeError("device detection is implemented for Windows only")
-    raw = json.loads(_run_powershell(_PS_SCRIPT))
+    raw = _query()
+    if not isinstance(raw, dict):
+        raise RuntimeError("device query returned an unexpected value")
     disks = _as_list(raw.get("disks"))
     devices = []
     for entry in _as_list(raw.get("usb")):

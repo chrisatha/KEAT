@@ -7,6 +7,7 @@
 **Kindle E-Reader Acquisition Tool.** Forensic acquisition and parsing of
 Amazon Kindle e-readers.
 
+[![tests](https://github.com/chrisatha/KEAT/actions/workflows/tests.yml/badge.svg)](https://github.com/chrisatha/KEAT/actions/workflows/tests.yml)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue)
 ![Platform: Windows](https://img.shields.io/badge/platform-Windows-lightgrey)
@@ -50,6 +51,8 @@ them from a synthetic image.*
 | **Copy** | Hashed copy of every file from a mounted volume, for when imaging is not possible |
 | **Verify** | Re-hashes an acquisition against its own records and reports changed, missing and added files |
 | **Parse** | Decodes the device's records into one SQLite file and one CSV per table. Optional matching against a set of known hashes |
+| **Compare** | Compares the records of two acquisitions: files added, removed or changed, and times that differ |
+| **Survey** | Writes the structure of a device with none of its content, for reporting a model the tool does not know |
 
 Every file, folder and error gets a row in a manifest. Nothing is skipped
 silently. Each run writes a log with the tool version, host, device, case
@@ -115,7 +118,7 @@ actions with a description beside each.
 ![Case and Output](docs/screenshots/case-and-output.png)
 
 **Switch to File Operations** shows the steps that work on an existing
-acquisition.
+acquisition, including Compare Acquisitions and Support Profile.
 
 ![File operations](docs/screenshots/file-operations.png)
 
@@ -155,6 +158,8 @@ kindle-acquire extract <image folder or image file> --out <folder>
 kindle-acquire logical --out <folder>
 kindle-acquire verify  <acquisition folder>
 kindle-acquire parse   <logical or extracted folder> [--known <folder or hash list>]
+kindle-acquire compare <acquisition folder> <acquisition folder> [--out <differences.csv>]
+kindle-acquire survey  <logical or extracted folder>
 kindle-acquire gui     [--tk]
 ```
 
@@ -175,6 +180,11 @@ computes MD5, SHA-1 and SHA-256. The image file is read back and compared.
 Unreadable sectors are zero-filled and listed in the log. Needs an
 elevated prompt. The image holds unallocated space, which a logical copy
 does not.
+
+If the source returns nothing for 4 MiB in a row, the device is treated
+as disconnected or failed. The read stops, the log is written with status
+`incomplete` and the offset where it stopped, and `verify` fails the
+image. A real unreadable area of that size has the same effect.
 
 ### extract
 
@@ -236,6 +246,34 @@ one MD5 or SHA-256 per line. Every file in the acquisition and every
 recovered deleted file is compared. A match means the content is
 identical. No match does not show the document was never on the device:
 a converted or edited copy has a different hash.
+
+### compare
+
+Compares two acquisitions of the same kind from their records. For
+extractions and logical copies it lists paths found on one side only,
+and files whose size, SHA-256, stored times, attributes or status
+differ. For images it compares the hashes. No file content is re-read:
+run `verify` first if a folder may have been altered. The exit code is 0
+when both hold the same files with the same hashes.
+
+Three uses: checking a change to the tool against an earlier extraction
+of the same image, checking an extraction against a copy made through
+Windows, and seeing what changed on a device between two acquisitions.
+
+### survey
+
+Writes `support_profile.json`: file types by area, recognised file
+signatures, sidecar field names with the shape of their values, database
+table and column names with row counts, and the kinds of parse error.
+
+It is meant to be attached to a report about a model or firmware the
+tool does not handle. It leaves out file names in the documents area,
+titles, text, annotation content, times of use, account identifiers, the
+volume label and all but the first six characters of the serial number.
+It is plain JSON. Read it before sharing it.
+
+[docs/NEW_DEVICE.md](docs/NEW_DEVICE.md) is the checklist for testing a
+new model.
 
 ## Output
 
@@ -336,6 +374,21 @@ python -m unittest discover -s tests
 
 Tests use synthetic data, including FAT32 images built in memory. Do not
 add device data to this repository.
+
+- **Unit tests** cover each command and parser.
+- **Regression test**: an invented Kindle (`tests/synthetic_kindle.py`)
+  is extracted and parsed, and the whole result is compared with
+  `tests/golden/synthetic_kindle.json`. After an intended change, set
+  `KEAT_UPDATE_GOLDEN=1`, run the tests, and review the diff of that file.
+- **Fuzz tests** damage the image, sidecar files and clippings text with
+  seeded random changes. The tool must report the damage, keep its output
+  inside the output folder and leave a folder that verifies. Set
+  `KEAT_FUZZ=10` for ten times as many cases.
+- **Fault tests** image a source with unreadable sectors and one that
+  stops responding.
+- **Window tests** start both windows.
+
+The same tests run on GitHub for Windows and Linux on each push.
 
 ## Licence and credits
 

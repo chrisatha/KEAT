@@ -117,6 +117,9 @@ def cmd_image(args):
     if args.verify_source:
         print("second read of the source matches: %s" % log["source_second_read_matches"])
     print("unreadable bytes: %d" % log["unreadable_bytes"])
+    if log["status"] == "incomplete":
+        print("INCOMPLETE: %s. The image holds %d of %d bytes." % (
+            log["stopped_reason"], log["image_size_bytes"], log["source_size_bytes"]))
     return 0 if log["status"] == "ok" else 2
 
 
@@ -145,6 +148,26 @@ def cmd_verify(args):
     print("%s acquisition, %d item(s) re-hashed: %s" % (
         result["kind"], result["checked"], "OK" if result["ok"] else "FAILED"))
     return 0 if result["ok"] else 2
+
+
+def cmd_compare(args):
+    from .compare import compare, describe, write_differences
+    result = compare(args.a, args.b)
+    print(describe(result))
+    if args.out:
+        write_differences(result, args.out)
+        print("differences written to %s" % args.out)
+    return 0 if result["same_content"] else 2
+
+
+def cmd_survey(args):
+    from .survey import survey
+    profile, path = survey(args.acquisition, args.out)
+    print("support profile written to %s" % path)
+    print("files: %d, folders: %d, parse errors: %d kinds" % (
+        profile["counts"]["files"], profile["counts"]["folders"], len(profile["parse_errors"])))
+    print("It holds structure, not content. Read it before sharing.")
+    return 0
 
 
 def cmd_parse(args):
@@ -210,6 +233,17 @@ def build_parser():
     p.add_argument("--known", help="reference files to look for: a folder of files, "
                                    "or a text/CSV file of MD5 or SHA-256 values")
     p.set_defaults(func=cmd_parse)
+
+    p = sub.add_parser("compare", help="compare the records of two acquisitions")
+    p.add_argument("a", help="first acquisition folder")
+    p.add_argument("b", help="second acquisition folder")
+    p.add_argument("--out", help="write every difference to this CSV file")
+    p.set_defaults(func=cmd_compare)
+
+    p = sub.add_parser("survey", help="write a content-free profile of a device's structure")
+    p.add_argument("acquisition", help="logical or extracted acquisition folder")
+    p.add_argument("--out", help="output file (default: <acquisition>/support_profile.json)")
+    p.set_defaults(func=cmd_survey)
     return parser
 
 

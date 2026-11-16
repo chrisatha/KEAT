@@ -7,6 +7,7 @@ worker thread and report progress through util.PROGRESS_HOOK.
 import ctypes
 import os
 import queue
+import sys
 import threading
 import time
 import tkinter as tk

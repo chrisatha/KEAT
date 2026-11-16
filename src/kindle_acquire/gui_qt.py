@@ -210,6 +210,10 @@ class Window(QtWidgets.QMainWindow):
              "its own records.", self.verify, False),
             ("View Results", "Browse the tables of a parsed acquisition.",
              self._open_results, False),
+            ("Compare\nAcquisitions", "Compare the records of two acquisitions: files added,\n"
+             "removed or changed, and times that differ.", self.compare, False),
+            ("Support Profile", "Write the structure of a device with no content, to\n"
+             "report a model or firmware the tool does not know.", self.survey, False),
         ], back=lambda: self._show(self.page_main))
         self.page_work = self._build_work()
         self.page_results = self._build_results()
@@ -363,7 +367,7 @@ class Window(QtWidgets.QMainWindow):
         page.setObjectName("page")
         layout = QtWidgets.QVBoxLayout(page)
         layout.setContentsMargins(30, 20, 30, 22)
-        layout.setSpacing(14)
+        layout.setSpacing(12)
         crumb = _label("", "crumb")
         self.crumbs.append(crumb)
         layout.addWidget(crumb)
@@ -777,6 +781,24 @@ class Window(QtWidgets.QMainWindow):
         acquisition = self._ask_folder("Acquisition folder")
         if acquisition:
             self._start("Verify Acquisition", [self._step_verify(acquisition)])
+
+    def compare(self):
+        first = self._ask_folder("First acquisition folder")
+        second = self._ask_folder("Second acquisition folder") if first else ""
+        if first and second:
+            def step():
+                self.bridge.progress.emit("Comparing records", 0, None)
+                jobs.run_compare(first, second, self._say)
+            self._start("Compare Acquisitions", [step])
+
+    def survey(self):
+        acquisition = self._ask_folder("Logical or extracted acquisition folder")
+        if acquisition:
+            def step():
+                self.bridge.progress.emit("Reading the structure of %s" % acquisition, 0, None)
+                jobs.run_survey(acquisition, self._say)
+                self.bridge.output.emit(acquisition)
+            self._start("Support Profile", [step])
 
     # --- results viewer ------------------------------------------------------------------------
     def _open_results(self):

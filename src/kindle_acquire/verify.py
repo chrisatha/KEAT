@@ -48,6 +48,9 @@ def verify(acq_dir):
             result["checked"] = 1
             if hash_file(image)["sha256"] != log["source_hashes"]["sha256"]:
                 result["problems"].append("image hash does not match the log")
+        if log.get("status") == "incomplete":
+            result["problems"].append(
+                "the image is incomplete: %s" % log.get("stopped_reason", "the read stopped early"))
     elif log.get("kind") == "logical":
         manifest = acq / "manifest.csv"
         if hash_file(manifest)["sha256"] != log.get("manifest_sha256"):

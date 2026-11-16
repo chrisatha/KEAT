@@ -21,6 +21,9 @@ from .util import hash_file, long_path, utc_now, write_json
 _ASIN = re.compile(r"_(B[0-9A-Z]{9})(_sample)?$")
 _CDE_KEY = re.compile(r"-cdeKey_([0-9A-Fa-f]{32})$")
 _SQLITE_MAGIC = b"SQLite format 3\x00"
+# Sidecar files are a few kilobytes. A larger file with the sidecar
+# signature is listed in parse_errors and not loaded into memory.
+MAX_SIDECAR_BYTES = 64 * 1024 * 1024
 
 
 def _container(head):
@@ -59,8 +62,8 @@ class _Output:
         with open(self.out / "csv" / (name + ".csv"), "w", newline="",
                   encoding="utf-8-sig") as fh:
             writer = csv.writer(fh)
-            writer.writerow(columns)
-            writer.writerows(rows)
+            writer.writerow([_csv_cell(c) for c in columns])
+            writer.writerows([_csv_cell(v) for v in row] for row in rows)
         self.counts[name] = len(rows)
 
     def close(self):
@@ -70,6 +73,16 @@ class _Output:
 def _ident(name):
     """Quote a table or column name. Names come from device databases."""
     return '"%s"' % str(name).replace('"', '""')
+
+
+def _csv_cell(value):
+    """A CSV cannot hold a NUL character. Show it as the text \\x00.
+
+    The SQLite file keeps the value unchanged.
+    """
+    if isinstance(value, str) and "\x00" in value:
+        return value.replace("\x00", "\\x00")
+    return value
 
 
 def _cell(value):
@@ -208,7 +221,9 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
                 data = fh.read(8)
                 if not krds.is_krds(data):
                     continue
-                data += fh.read()
+                data += fh.read(MAX_SIDECAR_BYTES)
+                if len(data) > MAX_SIDECAR_BYTES:
+                    raise krds.KrdsError("larger than %d bytes, not decoded" % MAX_SIDECAR_BYTES)
             decoded = krds.decode(data)
         except (OSError, krds.KrdsError, RecursionError) as exc:
             errors.append({"file": rel, "parser": "sidecar",

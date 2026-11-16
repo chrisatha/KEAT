@@ -49,6 +49,19 @@ def source_size(fh, path):
     return os.fstat(fh.fileno()).st_size
 
 
+# A source that returns nothing for this many bytes in a row is treated as
+# gone (unplugged or failed). Reading on would take one timeout per sector.
+LOST_SOURCE_BYTES = 4 * 1024 * 1024
+
+
+class SourceLost(OSError):
+    """The source stopped returning data."""
+
+    def __init__(self, offset):
+        super().__init__("the source stopped responding at byte offset %d" % offset)
+        self.offset = offset
+
+
 def _read_by_sector(fh, offset, length, sector, bad):
     """Read a range one sector at a time. Unreadable sectors become zeros."""
     out = bytearray()
@@ -73,21 +86,60 @@ def _read_by_sector(fh, offset, length, sector, bad):
     return bytes(out)
 
 
+def _read_source(fh, size, sector, bad, report):
+    """Yield the source in chunks. Raises SourceLost when it goes silent."""
+    offset = 0
+    try:
+        fh.seek(0)
+    except OSError:
+        raise SourceLost(0)
+    while offset < size:
+        want = min(CHUNK, size - offset)
+        try:
+            data = fh.read(want)
+        except OSError:
+            data = b""
+        if len(data) != want:
+            data = _read_by_sector(fh, offset, want, sector, bad)
+            if bad and bad[-1][0] + bad[-1][1] == offset + want \
+                    and bad[-1][1] >= min(LOST_SOURCE_BYTES, size):
+                # Earlier chunks of this run are already in the image as
+                # zeros. Keep that part listed and drop the chunk not written.
+                lost_from = bad[-1][0]
+                bad[-1][1] = offset - lost_from
+                if bad[-1][1] <= 0:
+                    bad.pop()
+                raise SourceLost(lost_from)
+            try:
+                fh.seek(offset + want)
+            except OSError:
+                raise SourceLost(offset + want)
+        yield data
+        offset += want
+        if report:
+            report(offset)
+    if report:
+        report(offset, final=True)
+
+
 def _safe_name(text):
     return re.sub(r"[^A-Za-z0-9._-]+", "_", text).strip("_") or "kindle"
 
 
 def acquire_image(source, out_dir, case=None, device=None, sector=DEFAULT_SECTOR,
-                  verify_source=False, name=None, quiet=False):
+                  verify_source=False, name=None, quiet=False, opener=None):
     """Image `source` (raw device path or file) into `out_dir`.
 
     Returns the acquisition log (also written to acquisition_log.json).
+    log["status"] is "ok", "review" (unreadable sectors or a hash that does
+    not match) or "incomplete" (the source stopped responding).
+    `opener` replaces open() in tests.
     """
     source = str(source)
     refuse_output_on_device(out_dir, device)
     # Open the source first: a refused open must not leave an output folder.
     try:
-        fh = open(source, "rb", buffering=0)
+        fh = (opener or (lambda p: open(p, "rb", buffering=0)))(source)
     except PermissionError as exc:
         raise PermissionError(
             "cannot open %s: %s. Raw devices need an elevated prompt." % (source, exc))
@@ -107,6 +159,7 @@ def acquire_image(source, out_dir, case=None, device=None, sector=DEFAULT_SECTOR
     log["sector_size"] = sector
     log["image_file"] = image_name
     log["image_format"] = "raw (dd), single file"
+    lost = None
 
     with fh:
         size = source_size(fh, source)
@@ -119,68 +172,54 @@ def acquire_image(source, out_dir, case=None, device=None, sector=DEFAULT_SECTOR
 
         hashers = {n: hashlib.new(n) for n in ("md5", "sha1", "sha256")}
         bad = []
+        written = 0
         report = None if quiet else progress_printer("image", size)
-        offset = 0
         with open(image_path, "wb") as img:
-            while offset < size:
-                want = min(CHUNK, size - offset)
-                try:
-                    data = fh.read(want)
-                except OSError:
-                    data = b""
-                if len(data) != want:
-                    data = _read_by_sector(fh, offset, want, sector, bad)
-                    fh.seek(offset + want)
-                for h in hashers.values():
-                    h.update(data)
-                img.write(data)
-                offset += want
-                if report:
-                    report(offset)
+            try:
+                for data in _read_source(fh, size, sector, bad, report):
+                    for h in hashers.values():
+                        h.update(data)
+                    img.write(data)
+                    written += len(data)
+            except SourceLost as exc:
+                lost = exc
             img.flush()
             os.fsync(img.fileno())
-        if report:
-            report(offset, final=True)
         log["read_finished_utc"] = utc_now()
+        log["image_size_bytes"] = written
         log["source_hashes"] = {n: h.hexdigest() for n, h in hashers.items()}
         log["unreadable_ranges"] = [{"offset": o, "length": n} for o, n in bad]
         log["unreadable_bytes"] = sum(n for _, n in bad)
+        if lost is not None:
+            log["stopped_at_offset"] = lost.offset
+            log["stopped_reason"] = str(lost)
 
         image_hash = hash_file(image_path)["sha256"]
         log["image_sha256"] = image_hash
         log["image_matches_source_read"] = image_hash == log["source_hashes"]["sha256"]
 
-        if verify_source:
+        if verify_source and lost is None:
             second = hashlib.sha256()
-            report = None if quiet else progress_printer("re-read source", size)
-            fh.seek(0)
-            offset = 0
             second_bad = []
-            while offset < size:
-                want = min(CHUNK, size - offset)
-                try:
-                    data = fh.read(want)
-                except OSError:
-                    data = b""
-                if len(data) != want:
-                    data = _read_by_sector(fh, offset, want, sector, second_bad)
-                    fh.seek(offset + want)
-                second.update(data)
-                offset += want
-                if report:
-                    report(offset)
-            if report:
-                report(offset, final=True)
+            report = None if quiet else progress_printer("re-read source", size)
+            try:
+                for data in _read_source(fh, size, sector, second_bad, report):
+                    second.update(data)
+                log["source_second_read_sha256"] = second.hexdigest()
+                log["source_second_read_matches"] = (
+                    second.hexdigest() == log["source_hashes"]["sha256"])
+            except SourceLost as exc:
+                log["source_second_read_matches"] = False
+                log["second_read_stopped_at_offset"] = exc.offset
             log["second_read_unreadable_ranges"] = [
                 {"offset": o, "length": n} for o, n in second_bad]
-            log["source_second_read_sha256"] = second.hexdigest()
-            log["source_second_read_matches"] = (
-                second.hexdigest() == log["source_hashes"]["sha256"])
+        elif verify_source:
+            log["source_second_read_matches"] = False
 
     log["finished_utc"] = utc_now()
     ok = log["image_matches_source_read"] and not bad
     if verify_source:
         ok = ok and log["source_second_read_matches"]
-    log["status"] = "ok" if ok else "review"
+    log["status"] = "incomplete" if lost is not None else ("ok" if ok else "review")
     write_json(out / "acquisition_log.json", log)
     return log

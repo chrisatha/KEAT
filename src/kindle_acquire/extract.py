@@ -95,6 +95,7 @@ def resolve_source(source):
             raise ValueError("%s is not an image acquisition" % source)
         image = os.path.join(source, image_log["image_file"])
         facts["image_log_sha256"] = image_log["source_hashes"]["sha256"]
+        facts["image_status"] = image_log.get("status")
         facts["device"] = image_log.get("device")
         facts["case"] = image_log.get("case")
     else:

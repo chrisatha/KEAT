@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kindle-acquire"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Forensic acquisition of Amazon Kindle e-readers: hashed logical copy, raw image, and parsers for notes, highlights and reading records."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -29,6 +29,9 @@ keat-gui = "kindle_acquire.cli:open_window"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.dynamic]
+version = { attr = "kindle_acquire.__version__" }
 
 [tool.setuptools.package-data]
 kindle_acquire = ["assets/*"]
