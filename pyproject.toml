@@ -16,13 +16,16 @@ classifiers = [
     "Topic :: Security",
 ]
 
+[project.optional-dependencies]
+gui = ["PySide6>=6.5"]
+
 [project.scripts]
 kindle-acquire = "kindle_acquire.cli:main"
 keat = "kindle_acquire.cli:main"
 
 [project.gui-scripts]
-kindle-acquire-gui = "kindle_acquire.gui:main"
-keat-gui = "kindle_acquire.gui:main"
+kindle-acquire-gui = "kindle_acquire.cli:open_window"
+keat-gui = "kindle_acquire.cli:open_window"
 
 [tool.setuptools.packages.find]
 where = ["src"]

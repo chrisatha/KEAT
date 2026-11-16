@@ -4,49 +4,21 @@ Runs the same functions as the command line. Long operations run on a
 worker thread and report progress through util.PROGRESS_HOOK.
 """
 
-import ctypes
 import os
 import queue
-import re
-import sys
 import threading
 import time
 import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 
-from . import __version__, util
+from . import __version__, jobs, util
+from .jobs import is_admin, relaunch_elevated
+from .jobs import safe_label as _safe
 
 
 class Cancelled(Exception):
     pass
-
-
-def is_admin():
-    if os.name != "nt":
-        return os.geteuid() == 0
-    try:
-        return bool(ctypes.windll.shell32.IsUserAnAdmin())
-    except (AttributeError, OSError):
-        return False
-
-
-def relaunch_elevated():
-    """Start a second copy of the GUI with administrator rights."""
-    # No path goes on the command line: the folder that holds the package is
-    # the working directory, where "-m" looks first.
-    src = str(Path(__file__).resolve().parents[1])
-    exe = Path(sys.executable)
-    windowed = exe.with_name("pythonw.exe")
-    if windowed.is_file():
-        exe = windowed
-    result = ctypes.windll.shell32.ShellExecuteW(
-        None, "runas", str(exe), "-m kindle_acquire gui", src, 1)
-    return result > 32
-
-
-def _safe(text):
-    return re.sub(r"[^A-Za-z0-9._-]+", "_", text).strip("_")
 
 
 class App:
@@ -340,105 +312,40 @@ class App:
         self.device_text.set(describe(found))
 
     # --- steps (run on the worker thread) ----------------------------------------------
-    def _recheck(self, device):
-        """Detect again and return the same device as it is connected now.
-
-        The list on screen can be stale: a different disk may have taken
-        the disk number since Detect was pressed.
-        """
-        from .device import detect
-        found = detect()
+    def _fresh(self, device):
+        current, found = jobs.recheck(device)
         self.queue.put(("device", found))
-        for current in found["devices"]:
-            if current["usb_serial"] == device["usb_serial"] and current["mode"] == device["mode"]:
-                current = dict(current)
-                current["usb_write_protect_policy"] = found.get("usb_write_protect_policy")
-                return current
-        raise RuntimeError("the Kindle with serial %s is no longer connected"
-                           % device["usb_serial"])
+        return current
 
     def _step_image(self, device, out, case, verify_source):
         def step():
-            nonlocal device
-            from .image import acquire_image
-            device = self._recheck(device)
-            source = "\\\\.\\PhysicalDrive%s" % device["disk"]["number"]
-            name = case["evidence_id"] or "kindle_%s" % device["usb_serial"]
             self.queue.put(("output", out))
-            self._say("Imaging %s into %s" % (source, out))
-            log = acquire_image(source, out, case=case, device=device,
-                                sector=device["disk"]["logical_sector_size"],
-                                verify_source=verify_source, name=name)
-            self._say("Image %s, %d bytes" % (log["image_file"], log["source_size_bytes"]))
-            for algo in ("md5", "sha1", "sha256"):
-                self._say("  %-6s %s" % (algo, log["source_hashes"][algo]))
-            self._say("Image file matches the bytes read: %s" % log["image_matches_source_read"])
-            if verify_source:
-                self._say("Second read of the device matches: %s" % log["source_second_read_matches"])
-            self._say("Unreadable bytes: %d" % log["unreadable_bytes"])
-            if log["status"] != "ok":
-                raise RuntimeError("the image needs review, see acquisition_log.json")
+            jobs.run_image(self._fresh(device), out, case, verify_source, self._say)
         return step
 
     def _step_logical(self, device, out, case):
         def step():
-            nonlocal device
-            from .logical import acquire_logical
-            device = self._recheck(device)
-            if not device["volumes"]:
-                raise RuntimeError("the Kindle disk has no mounted volume")
-            source = device["volumes"][0]["root"]
             self.queue.put(("output", out))
-            self._say("Copying %s into %s" % (source, out))
-            log = acquire_logical(source, out, case=case, device=device)
-            self._report_counts(log)
+            jobs.run_logical(self._fresh(device), out, case, self._say)
         return step
 
     def _step_extract(self, source, out, case):
         def step():
-            from .extract import extract_image
             self.queue.put(("output", out))
-            self._say("Extracting %s into %s" % (source, out))
-            log = extract_image(source, out, case=case)
-            self._report_counts(log)
-            c = log["counts"]
-            self._say("Deleted entries listed: %d. Deleted files read back: %d (%d bytes)" % (
-                c["deleted_entries"], c["deleted_files_recovered"], c["deleted_bytes_recovered"]))
+            jobs.run_extract(source, out, case, self._say)
         return step
 
     def _step_parse(self, acquisition, known):
         def step():
-            from .report import parse_acquisition
             self.queue.put(("progress", ("Parsing %s" % acquisition, 0, None)))
-            summary = parse_acquisition(acquisition, known=known or None)
-            self.queue.put(("output", summary.pop("output")))
-            width = max(len(k) for k in summary)
-            for key, value in summary.items():
-                self._say("  %-*s %s" % (width, key, value))
+            self.queue.put(("output", jobs.run_parse(acquisition, known, self._say)))
         return step
 
     def _step_verify(self, acquisition):
         def step():
-            from .verify import verify
             self.queue.put(("progress", ("Verifying %s" % acquisition, 0, None)))
-            result = verify(acquisition)
-            for problem in result["problems"]:
-                self._say("PROBLEM: %s" % problem)
-            self._say("%s acquisition, %d item(s) re-hashed: %s" % (
-                result["kind"], result["checked"], "OK" if result["ok"] else "FAILED"))
-            if not result["ok"]:
-                raise RuntimeError("verification found %d problem(s)" % len(result["problems"]))
+            jobs.run_verify(acquisition, self._say)
         return step
-
-    def _report_counts(self, log):
-        c = log["counts"]
-        self._say("Files written and verified: %d. Files with errors: %d. Folders: %d. Bytes: %d" % (
-            c["files_ok"], c["files_error"], c["folders"], c["bytes_copied"]))
-        self._say("Manifest SHA-256: %s" % log["manifest_sha256"])
-        for error in log["errors"]:
-            self._say("ERROR %s: %s" % (error["rel_path"], error["detail"]))
-        if log["errors"]:
-            raise RuntimeError("%d error(s), see manifest.csv" % len(log["errors"]))
 
     # --- actions (run on the main thread) --------------------------------------------------
     def _need_admin(self):

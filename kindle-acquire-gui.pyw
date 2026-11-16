@@ -1,10 +1,13 @@
-"""Double-click to open the kindle-acquire window from a checkout."""
+"""Double-click to open the KEAT window from a checkout.
+
+Uses the Qt window when PySide6 or PyQt6 is installed, else Tkinter.
+"""
 
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
-from kindle_acquire.gui import main  # noqa: E402
+from kindle_acquire.cli import open_window  # noqa: E402
 
-main()
+open_window()

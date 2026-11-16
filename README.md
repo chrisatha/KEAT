@@ -40,9 +40,26 @@ python -m kindle_acquire detect
 
 Double-click `kindle-acquire-gui.pyw`, or run `kindle-acquire gui`.
 
-The window runs the same functions as the command line. It shows the
-connected device, takes the case fields and an output folder, and names
-each output folder from the evidence item, the action and the time.
+There are two windows over the same functions:
+
+- The **Qt window** opens when PySide6 or PyQt6 is installed
+  (`pip install PySide6`, or `pip install .[gui]`). Device details sit in
+  a panel on the left. The right side is a menu of actions with a
+  description beside each, a second menu for work on existing
+  acquisitions, and a progress screen while a step runs. The layout
+  follows the UFADE and ALEX extraction tools by Christian Peter. No code
+  or assets from those projects are used. **View Results** opens
+  `kindle_parsed.db`: pick a table, filter rows, sort by a column, and
+  select a row to read every column in full.
+- The **Tkinter window** opens otherwise, or with `kindle-acquire gui --tk`.
+  It needs nothing beyond Python.
+
+Qt is used by the window only. The acquisition code stays on the
+standard library.
+
+The window shows the connected device and its write-protection state,
+takes the case fields and an output folder, and names each output folder
+from the evidence item, the action and the time.
 
 - **Full acquisition** images the disk, extracts from the image and parses
   the result, in that order, and stops at the first failure.
@@ -56,7 +73,8 @@ each output folder from the evidence item, the action and the time.
 - **Cancel** stops a copy, image or extraction. The output folder is left
   incomplete and has no acquisition log.
 
-The window uses Tkinter, which ships with Python on Windows.
+After **Parse** or **Full acquisition** the Qt window's progress screen
+offers **View results**.
 
 ### detect
 

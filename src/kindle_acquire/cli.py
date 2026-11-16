@@ -38,6 +38,23 @@ def _pick_device(mode_needed=None):
     return device
 
 
+def open_window(force_tk=False):
+    """The Qt window when PySide6 or PyQt6 is installed, else the Tkinter one."""
+    if not force_tk:
+        try:
+            from .gui_qt import main as qt_main
+        except ImportError:
+            pass
+        else:
+            return qt_main()
+    from .gui import main as tk_main
+    return tk_main()
+
+
+def cmd_gui(args):
+    return open_window(force_tk=args.tk)
+
+
 def cmd_detect(args):
     from .device import describe, detect
     found = detect()
@@ -147,8 +164,9 @@ def build_parser():
     sub = parser.add_subparsers(dest="command", required=True)
 
     p = sub.add_parser("gui", help="open the desktop window")
-    p.set_defaults(func=lambda args: __import__(
-        "kindle_acquire.gui", fromlist=["main"]).main())
+    p.add_argument("--tk", action="store_true",
+                   help="use the Tkinter window even when Qt is installed")
+    p.set_defaults(func=cmd_gui)
 
     p = sub.add_parser("detect", help="list connected Kindle devices")
     p.add_argument("--json", action="store_true", help="print JSON")
