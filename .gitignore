@@ -1,0 +1,34 @@
+# Acquisition output and evidence never belong in this repository.
+runs/
+output/
+evidence/
+*.dd
+*.E01
+*.aax
+*.kfx
+*.azw
+*.azw3
+*.yjr
+*.yjf
+*.pds
+*.pdt
+*.db
+*.db-wal
+*.db-shm
+manifest.csv
+deleted_entries.csv
+acquisition_log.json*
+My Clippings.txt
+parsed/
+/files/
+/deleted/
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.vscode/
+.idea/

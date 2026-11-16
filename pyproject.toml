@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kindle-acquire"
+version = "0.1.0"
+description = "Forensic acquisition of Amazon Kindle e-readers: hashed logical copy, raw image, and parsers for notes, highlights and reading records."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Security",
+]
+
+[project.scripts]
+kindle-acquire = "kindle_acquire.cli:main"
+keat = "kindle_acquire.cli:main"
+
+[project.gui-scripts]
+kindle-acquire-gui = "kindle_acquire.gui:main"
+keat-gui = "kindle_acquire.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
