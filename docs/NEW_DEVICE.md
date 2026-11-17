@@ -79,6 +79,10 @@ Look for:
   device writes `My Clippings.txt` in a wording the parser does not know
   (usually another interface language)
 - databases with rows that no parsed table draws on
+- an empty `activity_records` table on a device that holds
+  `system/fmcache/fmcache.db`: the table layout has changed
+- `browser_cache` rows with no `created_utc` under a `Cache` folder: the
+  cache format has changed
 
 ## 6. Check the records against the device
 
@@ -93,7 +97,20 @@ typed note if the device has none, acquire again, and confirm the note
 text appears in `annotations.note`. This check has not been made on any
 device yet.
 
-## 7. Record the result
+## 7. Optional: what the device answers
+
+On a test device only, never on evidence, from an elevated prompt:
+
+```
+python tools\scsi_probe.py --drive <N> --out <runs>\<name>_probe --hash
+```
+
+It records which SCSI commands the device accepts and whether its content
+changed. Compare the accepted list with "What the device answers over
+USB" in [METHOD.md](METHOD.md). An accepted code outside that list is a
+finding. Do not publish it before the vendor has been told.
+
+## 8. Record the result
 
 - Add a row to "Tested devices" in the README: model, serial prefix (six
   characters), firmware, USB ID, mode, and which commands passed.

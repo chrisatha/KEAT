@@ -283,7 +283,7 @@ DOCUMENT_COLUMNS = [
 
 
 def build_timeline(files, annotations, positions, clippings, lookups, deleted_rows,
-                   exported, titles):
+                   exported, titles, extra):
     events = []
 
     def add(time, basis, source, event, key="", detail="", state="", record="", title=None):
@@ -360,10 +360,40 @@ def build_timeline(files, annotations, positions, clippings, lookups, deleted_ro
             "reading statistics", "reading recorded for the day", "",
             "timeread %s | wordsread %s" % (row.get("timeread"), row.get("wordsread")),
             "allocated", "system/freetime/freetime.db dayinfo", title="")
-    for row in exported.get("fmcache_records", ((), ()))[1]:
-        add(_ms(row.get("created_timestamp")), UTC, "queued activity record",
-            str(row.get("schema_name") or "record"), "", str(row.get("record") or ""),
-            "allocated", "system/fmcache/fmcache.db records id %s" % row.get("id"), title="")
+    for row in extra["activity_records"][1]:
+        add(row["created_utc"], UTC, "activity log", row["schema_name"], "", row["record"],
+            row["state"], "%s records id %s" % (row["source_file"], row["row_id"]), title="")
+    for row in extra["reading_sessions"][1]:
+        detail = "session %s | ASIN %s | locations %s to %s" % (
+            row["reading_session_id"], row.get("asin"), row.get("start_reading_location"),
+            row.get("end_reading_location"))
+        record = "%s reading_sessions id %s" % (row["source_file"], row["reading_session_id"])
+        add(row["start_utc"], UTC, "activity log", "reading session started", "", detail,
+            row["state"], record, title=row["title"])
+        add(row["end_utc"], UTC, "activity log", "reading session ended", "",
+            "%s | %s page turns | closed by %s" % (detail, row.get("page_turns"),
+                                                   row.get("close_method") or "(not recorded)"),
+            row["state"], record, title=row["title"])
+    for row in extra["page_history"][1]:
+        add(row["time_utc"], UTC, "sidecar", "page history record", row["book_key"],
+            "position %s" % row["position"], row["file_state"], row["sidecar_file"])
+    for row in extra["audiobook_positions"][1]:
+        add(row["updated_utc"] or row["created_utc"], UTC, "audiobook database",
+            "audiobook position saved (%s)" % row.get("type"), "",
+            "ASIN %s | position %s | set by %s" % (row.get("asin"), row["position"],
+                                                   row.get("source_device") or "(not recorded)"),
+            "allocated", row["source_file"], title=row["title"])
+    for row in extra["store_storage"][1]:
+        add(row["time_utc"], UTC, "store pages", "store page data saved (%s)" % row["kind"], "",
+            " | ".join(p for p in (row["url"], row["asin"]) if p) or row["key"],
+            "allocated", row["source_file"], title="")
+    for row in extra["browser_cache"][1]:
+        if row["created_utc"]:
+            add(row["created_utc"], UTC, "browser cache", "browser cache entry created", "",
+                row["url"], "allocated", "%s, %s" % (row["rel_path"], row["record"]), title="")
+        else:
+            add(row["created_stored"], FAT, "browser cache", "browser cache file created", "",
+                row["url"], "allocated", row["rel_path"], title="")
 
     events.sort(key=lambda e: (e["time"][:19], e["time"], e["source"], e["event"],
                                e["record"], e["detail"]))
@@ -391,10 +421,12 @@ def _document_key(rel_path):
 _DAY_COLUMNS = {
     "sidecar": "annotations_and_positions", "My Clippings.txt": "clippings",
     "vocabulary database": "lookups", "reading statistics": "reading_statistics",
-    "queued activity record": "queued_activity_records"}
+    "activity log": "activity_log", "audiobook database": "audiobooks",
+    "store pages": "store_pages", "browser cache": "browser_cache"}
 ACTIVITY_COLUMNS = ["day", "total", "annotations_and_positions", "clippings", "lookups",
-                    "files_created", "files_modified", "deleted_entry_times",
-                    "reading_statistics", "queued_activity_records"]
+                    "activity_log", "audiobooks", "store_pages", "browser_cache",
+                    "reading_statistics", "files_created", "files_modified",
+                    "deleted_entry_times"]
 
 
 def build_activity(timeline):
@@ -467,7 +499,7 @@ def build_observations(documents, annotations, clippings, matched, timeline, fin
 
 
 def build_summary(log, facts, manifest, documents, annotations, positions, clippings,
-                  lookups, deleted_rows, pairs, timeline, errors, tool_version):
+                  lookups, deleted_rows, pairs, timeline, errors, tool_version, extra):
     rows = []
 
     def add(section, item, value, source=""):
@@ -500,6 +532,29 @@ def build_summary(log, facts, manifest, documents, annotations, positions, clipp
     for group in (log.get("source_volume") or {},):
         add("Device", "volume label", group.get("label"), log_name)
         add("Device", "file system", group.get("filesystem"), log_name)
+
+    apps = extra["app_sessions"][1]
+    if apps:
+        last, source = apps[-1], "app_sessions, session %s" % apps[-1]["app_session_id"]
+        add("Device", "time zone setting", last.get("time_zone"), source)
+        add("Device", "device model code", last.get("device_model"), source)
+        add("Device", "serial number in the activity log", last.get("device_serial_number"),
+            source)
+        add("Device", "account ID", last.get("customer_id"), source)
+        add("Device", "country of residence", last.get("country_of_residence"), source)
+        add("Device", "software", last.get("os_version"), source)
+    library = [r for r in extra["activity_records"][1]
+               if r["schema_name"] == "kindle_metrics_library_size"]
+    if library:
+        try:
+            counts = json.loads(library[-1]["record"])
+        except ValueError:
+            counts = {}
+        for key in ("all", "books", "books_downloaded", "audiobooks", "audiobooks_downloaded",
+                    "documents", "documents_downloaded"):
+            if isinstance(counts, dict) and key in counts:
+                add("Library", "library count: %s" % key.replace("_", " "), counts[key],
+                    "activity_records, %s" % library[-1]["created_utc"])
 
     case = log.get("case") or {}
     for key, label in (("case_id", "case"), ("evidence_id", "evidence item"),
@@ -553,6 +608,29 @@ def build_summary(log, facts, manifest, documents, annotations, positions, clipp
     add("Records", "reading positions with a time",
         sum(1 for p in positions if p.get("time_utc")), "reading_positions")
     add("Records", "word lookups", len(lookups), "vocabulary_lookups")
+    records = extra["activity_records"][1]
+    add("Records", "activity records in the database now",
+        sum(1 for r in records if r["state"] == "current row"), "activity_records")
+    add("Records", "activity records only in earlier page versions",
+        sum(1 for r in records if r["state"] != "current row"), "activity_records")
+    add("Records", "reading sessions", len(extra["reading_sessions"][1]), "reading_sessions")
+    add("Records", "app sessions", len(apps), "app_sessions")
+    add("Records", "connectivity records", len(extra["connectivity"][1]), "connectivity")
+    add("Records", "power and screen records", len(extra["power_events"][1]), "power_events")
+    add("Records", "page history records", len(extra["page_history"][1]), "page_history")
+    add("Records", "audiobook positions", len(extra["audiobook_positions"][1]),
+        "audiobook_positions")
+    add("Records", "book and audiobook links", len(extra["audiobook_links"][1]),
+        "audiobook_links")
+    add("Records", "store page records", len(extra["store_storage"][1]), "store_storage")
+    add("Records", "browser cache entries", len(extra["browser_cache"][1]), "browser_cache")
+    add("Records", "browser cache hosts",
+        len(set(r["host"] for r in extra["browser_cache"][1] if r["host"])), "browser_cache")
+    thumbs = extra["thumbnails"][1]
+    add("Records", "thumbnail items", len(set(r["item_id"] for r in thumbs)), "thumbnails")
+    add("Records", "thumbnail items with a document file present",
+        len(set(r["item_id"] for r in thumbs if r["document_present"] == "yes")),
+        "thumbnails")
     add("Records", "timeline events", len(timeline), "timeline")
     add("Records", "parse errors", len(errors), "parse_errors")
 
@@ -579,21 +657,52 @@ def build_summary(log, facts, manifest, documents, annotations, positions, clipp
     return rows
 
 
+def _fill_titles(extra, documents, titles):
+    """Put titles into the tables that hold only an identifier."""
+    by_id = dict((asin, value[0]) for asin, value in titles.by_asin.items())
+    present = set()
+    for row in documents:
+        for key in (row["asin"], row["cde_key"]):
+            if key:
+                by_id.setdefault(key, row["title"])
+                if row["state"] == "file present":
+                    present.add(key)
+    for row in extra["reading_sessions"][1]:
+        row["title"] = by_id.get(row.get("asin"), "")
+        if not row["title"]:
+            # A personal document has no ASIN. Its key is elsewhere in the session.
+            keys = re.findall(r"[0-9A-Fa-f]{32}", row.get("session") or "")
+            row["title"] = next((by_id[k.upper()] for k in keys if k.upper() in by_id), "")
+    for row in extra["audiobook_positions"][1]:
+        row["title"] = by_id.get(row.get("asin"), "")
+    for row in extra["audiobook_links"][1]:
+        row["ebook_title"] = by_id.get(row.get("ebook_asin"), "")
+        row["audiobook_title"] = by_id.get(row.get("audiobook_asin"), "")
+    for row in extra["thumbnails"][1]:
+        row["title"] = by_id.get(row["item_id"], "")
+        row["document_present"] = "yes" if row["item_id"] in present else "no"
+
+
 def build(log, facts, manifest, files, content, annotations, positions, clippings, lookups,
-          deleted_rows, sidecar_files, exported, errors, tool_version):
-    """Returns [(table name, columns, rows)] in the order to write them."""
+          deleted_rows, sidecar_files, exported, errors, tool_version, extra):
+    """Returns [(table name, columns, rows)] in the order to write them.
+
+    `extra` holds the tables of device_records. Their title columns are
+    filled in here.
+    """
     titles = _Titles(exported, lookups)
     pairs, matched = clock_offsets(clippings, annotations, titles)
     documents = build_documents(content, annotations, positions, clippings, lookups,
                                 deleted_rows, sidecar_files, titles)
+    _fill_titles(extra, documents, titles)
     timeline = build_timeline(files, annotations, positions, clippings, lookups,
-                              deleted_rows, exported, titles)
+                              deleted_rows, exported, titles, extra)
     finished = (log or {}).get("finished_utc", "")
     observations = build_observations(documents, annotations, clippings, matched, timeline,
                                       finished)
     summary = build_summary(log, facts, manifest, documents, annotations, positions,
                             clippings, lookups, deleted_rows, pairs, timeline, errors,
-                            tool_version)
+                            tool_version, extra)
     return [
         ("device_summary", ["section", "item", "value", "source"], summary),
         ("documents", DOCUMENT_COLUMNS, documents),

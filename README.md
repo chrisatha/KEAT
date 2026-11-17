@@ -73,7 +73,16 @@ The acquisition code uses the Python standard library only.
 | The running log of highlights, notes and bookmarks | `My Clippings.txt` |
 | Dictionary lookups with the sentence and the book | `system/vocabulary/vocab.db` |
 | Loaded books, PDFs and audio files with hashes, container type and the identifier in the file name | `documents/`, `audible/` |
-| Reading statistics and queued device activity records | `system/freetime/`, `system/fmcache/` |
+| Reading statistics | `system/freetime/` |
+| Reading sessions: book, start, end, page turns, positions and how the book was closed | `system/fmcache/fmcache.db` and its write-ahead log |
+| Activity records the device has already removed from its database | Earlier page versions in `fmcache.db-wal` |
+| Connection changes (WiFi on and off), sleep, wake and screensaver events | The same activity log |
+| Time zone setting, account ID and library counts | The same activity log |
+| Last position heard per audiobook, and books linked to audiobooks | `audible/*.db` |
+| Store pages viewed and store requests, with times | `.active_content_sandbox/` local storage |
+| Web addresses the browser loaded, with times | `system/browser/kindle_browser/` cache |
+| Covers of items the device has listed | `system/thumbnails/` |
+| Page jumps inside a book, with times | `page.history.store` in sidecar files |
 | Deleted file and folder names, sizes, times and first cluster | FAT32 directory entries in the image |
 | Every other SQLite database found, with tables and row counts | Whole volume |
 
@@ -142,6 +151,10 @@ The `timeline` table puts every dated record in one list. Each row names
 its time basis and the record it came from.
 
 ![Timeline](docs/screenshots/timeline.png)
+
+The `reading_sessions` table has one row per session the device logged.
+
+![Reading sessions](docs/screenshots/reading-sessions.png)
 
 **Open Report** opens the examiner report of the loaded results in the
 default browser.
@@ -250,7 +263,17 @@ and writes `parsed/kindle_parsed.db` plus one CSV per table:
 | `vocabulary_lookups` | Dictionary lookups with the sentence and the book |
 | `sidecar_fields` | Every field of every sidecar file, decoded |
 | `database_inventory` | Every SQLite database found, with tables and row counts |
-| `freetime_*`, `fmcache_records` | Reading statistics and queued device activity records, as stored |
+| `freetime_*`, `fmcache_*` | Reading statistics and the activity log tables as SQLite returns them now |
+| `activity_records` | Every activity record found in `fmcache.db` and in every page version of its write-ahead log. `state` is `current row` or `earlier page version` |
+| `reading_sessions` | One row per reading session: title, start, end, seconds, page turns, first and last position read, how the book was closed |
+| `app_sessions` | One row per wake-to-sleep session, with the time zone setting, serial number, account ID and software version the device recorded in it |
+| `connectivity` | Connection changes with times |
+| `power_events` | Power state changes, screensaver events, wake-ups from hibernation with the reason |
+| `page_history` | Positions the reader jumped from, with times, from sidecar files |
+| `audiobook_positions`, `audiobook_links` | Last position heard per audiobook with the device that set it, and the books linked to audiobooks |
+| `store_storage` | What the store pages saved: pages requested, with times and the full saved value |
+| `browser_cache` | One row per browser cache entry: address, host, creation time in UTC where the cache records one |
+| `thumbnails` | Covers by item, and whether the item's file is on the device |
 | `deleted_entries` | Deleted directory entries and recovery results (extracted images only) |
 | `known_matches` | Files whose hash is in the reference set given with `--known` |
 | `parse_errors` | Every file a parser could not read, with the reason |
@@ -269,8 +292,9 @@ else, and each row names the record it came from:
 
 Parse also writes `parsed/report.html`, the examiner report: summary
 counts, documents, annotations by document with the clipping text beside
-each, clippings, cross-checks, activity by day, the timeline without file
-system events, device and acquisition details, and the limits that apply.
+each, clippings, reading sessions, audiobooks, connection and power
+events, store and browser records, cross-checks, activity by day, a
+timeline, device and acquisition details, and the limits that apply.
 It is one file with no scripts and no outside links. Text from the device
 is escaped. Its SHA-256 is in `report.html.sha256`.
 
@@ -399,6 +423,16 @@ established, with the test figures.
   data, not yet against a device. The functions behind them have.
 - KEAT has not yet been tested with the Kindle behind a hardware write
   blocker. The device tests were made on a direct USB connection.
+- The activity log holds what the device had not yet discarded. On the
+  test device it covered 16 hours in detail and one session four days
+  earlier. It is not a full history of use.
+- A row marked `earlier page version` was in the database once. The log
+  does not say when it was removed.
+- The device does not store WiFi network names or passwords on the USB
+  volume. The activity log says when the connection changed. The browser
+  cache can hold the sign-in page of a network.
+- A cover in `thumbnails` shows the device listed the item. It does not
+  show the item was downloaded or opened.
 - The model name in `device_summary` comes from a community list of
   serial number codes. It covers four models and is an indication only.
 - Titles come from the device's databases where an ASIN matches, else from

@@ -201,6 +201,97 @@ device lists. The test device's code is `1PX`, listed as the Paperwhite
 11th generation. This has not been checked against the label on the
 device.
 
+## Activity log
+
+`system/fmcache/fmcache.db` holds three tables: `records`,
+`app_sessions` and `reading_sessions`. The device queues activity records
+there and removes them later. On the test device the database held 17
+records at the time of imaging.
+
+The database runs in write-ahead mode. Its `-wal` file was 4.1 MB and held
+1,004 page frames from three generations. Each frame is a full copy of a
+page as it was when written. The tool decodes every table leaf page in the
+database file and in every frame, and keeps each distinct row once.
+
+On the test device this gave 782 distinct records, 9 reading sessions and
+9 app sessions. 765 of the records were no longer in the database. The
+records ran from 03:29 to 19:16 UTC on the day of imaging. One reading
+session dated from four days earlier.
+
+A row is assigned to a table by its shape: ten columns with text in the
+second and tenth for a record, four columns with a JSON session in the
+third for a session. A row that continues on an overflow page is not
+used. None did on the test device.
+
+A session row is rewritten while the session runs. The tool keeps the
+version with the latest end time. Page turns are counted from the
+`ereader_book_page_turn` records that carry the session's number and fall
+between its start and end.
+
+The two long sessions on the test device ran 2,143 and 1,323 seconds with
+70 and 22 page turns. Six sessions lasted 60 seconds with no page turn:
+the device woke, reopened the book and slept again.
+
+### What the activity log does not hold
+
+Connection records name the kind of connection and its state. They do not
+name the network. No file on the USB volume held a network name or
+password.
+
+## Browser cache
+
+The browser is Chromium. Its main cache is in the block-file format:
+`index`, `data_0` to `data_3` and `f_*` files. Each 256-byte entry record
+in `data_1` holds the address and a creation time in microseconds since
+1601, in UTC. The tool reads every block that has a plausible time, a key
+length that fits and a key containing `://`. On the test device this gave
+462 entries from 22 hosts. A key longer than one entry record's blocks is
+stored elsewhere and is not read.
+
+The code cache and service worker cache use the simple format, one file
+per entry. These carry no creation time. They are dated by the stored
+file time. The test device held 46.
+
+## Audiobooks and store pages
+
+`audible/default.audible.db` holds one `ANNOTATIONS` row per audiobook of
+type `REMOTE_LPH`, the last position heard, with a time and the name of
+the app that set it. The meaning of its `LTO` column is not confirmed. It
+held 0 on one row and -240 on the other.
+
+The store pages keep a WebKit local storage file. Keys starting `*index*`
+hold the time a store request was saved. Keys starting `*cache*` hold the
+response. On the test device the file held one book page and one order
+response.
+
+## What the device answers over USB
+
+In mass-storage mode the test device presents one USB interface: class
+08, subclass 06, protocol 50. That is mass storage with SCSI commands over
+bulk-only transport, and one logical unit.
+
+`tools/scsi_probe.py` sent it the standard read-only queries and then one
+command per operation code from 0x00 to 0xFF, each with zero arguments.
+52 codes that write, erase, format, reserve, stop the unit or load
+firmware were not sent.
+
+| Answer | Operation codes |
+| --- | --- |
+| Accepted, or recognised with the zero arguments rejected | 12 |
+| Rejected as an invalid operation code | 191 |
+| Not delivered by Windows | 1 |
+| Not sent | 52 |
+
+The 12 are TEST UNIT READY, REQUEST SENSE, INQUIRY, MODE SENSE (6 and
+10), PREVENT ALLOW MEDIUM REMOVAL, READ FORMAT CAPACITIES, READ CAPACITY,
+READ (10 and 12), VERIFY and SYNCHRONIZE CACHE. All 64 vendor-specific
+codes from 0xC0 to 0xFF were rejected. The device refused the vital
+product data pages of INQUIRY. The SHA-256 of the whole device was the
+same before and after.
+
+Not tested: the 52 codes that were not sent, commands with other
+arguments, and USB control requests below SCSI.
+
 ## My Clippings.txt
 
 The device appends to this file. In the test data it held two bookmark

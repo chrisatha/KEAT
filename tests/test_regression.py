@@ -34,7 +34,11 @@ import synthetic_kindle  # noqa: E402
 GOLDEN = Path(__file__).resolve().parent / "golden" / "synthetic_kindle.json"
 # SQLite writes its own version into a database file, so the bytes of
 # vocab.db differ between Python builds. Its hash and size are left out.
-VARIABLE_FILES = ("system/vocabulary/vocab.db",)
+VARIABLE_FILES = ("system/vocabulary/vocab.db", "system/fmcache/fmcache.db",
+                  "system/fmcache/fmcache.db-wal", "audible/default.audible.db",
+                  ".active_content_sandbox/store/https_store.example_0.localstorage")
+# Columns that depend on how the SQLite build laid out its pages.
+VARIABLE_COLUMNS = ("page_versions", "first_found_in")
 # Rows of device_summary that change with the run, the version or vocab.db.
 VARIABLE_ITEMS = ("started (UTC)", "finished (UTC)", "tool version",
                   "parsed with tool version", "manifest SHA-256", "source image SHA-256")
@@ -62,6 +66,11 @@ def snapshot(out):
                 for key in ("sha256", "md5", "size"):
                     if key in record:
                         row[columns.index(key)] = "<varies>"
+            for key in VARIABLE_COLUMNS:
+                if key in record:
+                    row[columns.index(key)] = "<varies>"
+            if name == "database_inventory":
+                continue
             if name == "device_summary" and record["item"] in VARIABLE_ITEMS:
                 row[columns.index("value")] = "<varies>"
         tables[name] = {"columns": columns, "rows": rows}
@@ -154,15 +163,49 @@ class SyntheticKindle(unittest.TestCase):
             self.assertIn(wanted, checks)
         self.assertNotIn("time later than the acquisition", checks)
 
+    def test_device_use_tables(self):
+        sessions = self._rows("SELECT reading_session_id, title, page_turns, state "
+                              "FROM reading_sessions ORDER BY rowid")
+        self.assertEqual(sessions, [
+            (1, "Tidewater Engineering Handbook", 5, "earlier page version"),
+            (2, "Q3 operations review", 1, "current row")])
+        self.assertEqual(self._rows("SELECT state, COUNT(*) FROM activity_records "
+                                    "GROUP BY state ORDER BY state"),
+                         [("current row", 3), ("earlier page version", 16)])
+        self.assertEqual(self._rows("SELECT title, position, source_device "
+                                    "FROM audiobook_positions"),
+                         [("", "1:23:45", "Synthetic phone app")])
+        self.assertEqual(self._rows("SELECT ebook_title FROM audiobook_links"),
+                         [("A Short History of Lighthouses",)])
+        self.assertEqual(self._rows("SELECT item_id, document_present FROM thumbnails "
+                                    "ORDER BY item_id"),
+                         [("B0SYNTH001", "yes"), ("B0SYNTH002", "yes"), ("B0SYNTH777", "no"),
+                          ("B0SYNTHAU1", "no")])
+        self.assertEqual(self._rows("SELECT COUNT(*) FROM browser_cache "
+                                    "WHERE created_utc != ''")[0][0], 2)
+        self.assertEqual(self._rows("SELECT COUNT(*) FROM page_history")[0][0], 2)
+        zone = self._rows("SELECT value FROM device_summary WHERE item = 'time zone setting'")
+        self.assertEqual(zone, [("America/Chicago",)])
+        events = [r[0] for r in self._rows(
+            "SELECT event FROM timeline WHERE source IN ('activity log', 'audiobook database', "
+            "'store pages', 'browser cache')")]
+        for wanted in ("reading session started", "reading session ended",
+                       "ereader_framework_connectivity", "audiobook position saved (REMOTE_LPH)",
+                       "store page data saved (index)", "browser cache entry created",
+                       "browser cache file created"):
+            self.assertIn(wanted, events)
+
     def test_examiner_report(self):
         report = self.out / "parsed" / "report.html"
         text = report.read_text(encoding="utf-8")
         for wanted in ("Kindle examination record", "Tidewater Engineering Handbook",
                        "Ask finance for the source of the freight number.", "UTC-05:00",
-                       "Draft supplier terms"):
+                       "Draft supplier terms", "Reading sessions", "portal.example.net",
+                       "America/Chicago", "GoingToScreensaver", "1:23:45"):
             self.assertIn(wanted, text)
         self.assertNotIn("<script", text.lower())
-        self.assertNotIn("http", text.replace("data:image", ""))
+        self.assertNotIn("<a href=\"http", text)
+        self.assertNotIn("src=\"http", text)
         recorded = (self.out / "parsed" / "report.html.sha256").read_text().split()[0]
         self.assertEqual(recorded, hashlib.sha256(report.read_bytes()).hexdigest())
 
@@ -179,6 +222,14 @@ class SyntheticKindle(unittest.TestCase):
         con.execute("UPDATE timeline SET detail = ?, title = ?", (hostile, hostile))
         con.execute("UPDATE device_summary SET value = ?", (hostile,))
         con.execute("UPDATE observations SET item = ?", (hostile,))
+        con.execute("UPDATE reading_sessions SET title = ?, close_method = ?",
+                    (hostile, hostile))
+        con.execute("UPDATE activity_records SET schema_name = ?", (hostile,))
+        con.execute("UPDATE browser_cache SET host = ?, url = ?", (hostile, hostile))
+        con.execute("UPDATE store_storage SET url = ?, key = ?", (hostile, hostile))
+        con.execute("UPDATE audiobook_positions SET source_device = ?", (hostile,))
+        con.execute("UPDATE connectivity SET connection_state = ?", (hostile,))
+        con.execute("UPDATE power_events SET detail = ?", (hostile,))
         con.commit()
         con.close()
         text = Path(write_report(copy)).read_text(encoding="utf-8")
@@ -252,7 +303,7 @@ class SyntheticKindle(unittest.TestCase):
             self.assertNotIn(private.lower(), text.lower(), private)
         self.assertNotIn(str(self.tmp).lower(), text.lower())
         self.assertEqual(profile["device"]["firmware"], "Kindle 5.17.1 (0000000 000)")
-        self.assertEqual(profile["counts"]["files"], 11)
+        self.assertEqual(profile["counts"]["files"], 21)
         self.assertEqual(profile["file_types_by_area"]["documents"],
                          {".kfx": 3, ".pdf": 1, ".txt": 1})
         self.assertEqual(profile["signatures_by_extension"][".yjr"], {"kindle sidecar": 3})

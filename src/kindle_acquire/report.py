@@ -13,7 +13,7 @@ import sqlite3
 import tempfile
 from pathlib import Path
 
-from . import __version__, analysis
+from . import __version__, analysis, device_records
 from .parsers import krds
 from .parsers.clippings import parse_clippings
 from .util import hash_file, long_path, utc_now, write_json
@@ -323,7 +323,7 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
     wanted = {
         "system/vocabulary/vocab.db": None,
         "system/freetime/freetime.db": ("bookinfo", "bookmetadata", "dayinfo", "badgesearned"),
-        "system/fmcache/fmcache.db": ("records",),
+        "system/fmcache/fmcache.db": ("records", "app_sessions", "reading_sessions"),
     }
     try:
         for row in files:
@@ -373,6 +373,10 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
                 errors.append({"file": rel, "parser": "sqlite", "error": str(exc)})
             finally:
                 con.close()
+        # --- activity log, audiobooks, store pages, browser cache, thumbnails ---
+        extra = device_records.collect(
+            files, read, lambda rel: _open_working_copy(files_root / rel, tmp_root),
+            exported, fields, errors)
     finally:
         shutil.rmtree(tmp_root, ignore_errors=True)
     out.table("vocabulary_lookups", ["lookup_utc", "word", "stem", "language", "usage",
@@ -391,9 +395,12 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
                                   or known_hashes.get(row["md5"]) or "")
         out.table("deleted_entries", deleted_columns + ["known_match"], deleted_rows)
     # --- analysis tables, derived from the rows above ---------------------------
-    for name, columns, rows in analysis.build(
-            log, facts, manifest, files, content, annotations, positions, clippings,
-            lookups, deleted_rows, sidecar_files, exported, errors, __version__):
+    derived = analysis.build(
+        log, facts, manifest, files, content, annotations, positions, clippings,
+        lookups, deleted_rows, sidecar_files, exported, errors, __version__, extra)
+    for name, (columns, rows) in extra.items():
+        out.table(name, columns, rows)
+    for name, columns, rows in derived:
         out.table(name, columns, rows)
     out.table("parse_errors", ["file", "parser", "error"], errors)
     out.close()

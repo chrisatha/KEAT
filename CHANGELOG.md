@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.4.0
+
+### Added
+
+- A reader for SQLite write-ahead logs. It returns the rows of every page
+  version, including rows the database no longer holds.
+- `activity_records`, `reading_sessions`, `app_sessions`, `connectivity`
+  and `power_events`, from the device's activity log and its write-ahead
+  log.
+- `audiobook_positions` and `audiobook_links`, from the databases under
+  `audible/`.
+- `store_storage`, from the store pages' local storage.
+- `browser_cache`, from both Chromium cache formats. Block-file entries
+  carry their creation time in UTC.
+- `thumbnails` and `page_history`.
+- All of these feed the timeline, the device summary and the examiner
+  report. The summary gains the time zone setting, the account ID and the
+  library counts.
+- `tools/scsi_probe.py`: asks a test device which SCSI commands it
+  answers. It is not part of the acquisition and is not for evidence.
+- Tests for the log reader on hand-built pages and on a real SQLite log,
+  and fuzz tests for the log reader, the activity log and the browser
+  cache.
+
+### Changed
+
+- The timeline source `queued activity record` is now `activity log` and
+  includes records from earlier page versions.
+- `activity_by_day` has columns for the activity log, audiobooks, store
+  pages and the browser cache.
+
 ## 0.3.0
 
 ### Added

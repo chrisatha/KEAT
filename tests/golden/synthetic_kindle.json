@@ -17,6 +17,38 @@
    "detail": ""
   },
   {
+   "rel_path": "audible",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": ".active_content_sandbox",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
    "rel_path": "documents",
    "type": "folder",
    "size": "",
@@ -65,7 +97,279 @@
    "detail": ""
   },
   {
+   "rel_path": "system/fmcache",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/thumbnails",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/browser",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
    "rel_path": "system/vocabulary/vocab.db",
+   "type": "file",
+   "size": "<varies>",
+   "sha256": "<varies>",
+   "md5": "<varies>",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/fmcache/fmcache.db",
+   "type": "file",
+   "size": "<varies>",
+   "sha256": "<varies>",
+   "md5": "<varies>",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/fmcache/fmcache.db-wal",
+   "type": "file",
+   "size": "<varies>",
+   "sha256": "<varies>",
+   "md5": "<varies>",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/thumbnails/thumbnail_B0SYNTH001_EBOK_portrait.jpg",
+   "type": "file",
+   "size": "204",
+   "sha256": "80dc4b33cc938ddee6c641c2719ca99f41145676267572fdff59f72aed7295fd",
+   "md5": "7d8efc4de788c9bad512ec82534a74e5",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/thumbnails/thumbnail_B0SYNTH002_EBOK_portrait.jpg",
+   "type": "file",
+   "size": "204",
+   "sha256": "da123ef31c84381d99d9cefd1df2e994c87f45ca13fe8f81bb3271aa4d2788e5",
+   "md5": "49b0d77d5c7fa02588baa618f62a3e66",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/thumbnails/thumbnail_B0SYNTH777_EBSP_portrait.jpg",
+   "type": "file",
+   "size": "204",
+   "sha256": "316a0af3bc5099f4b6e01624de7b95704cd5d88b7b18f3474e53af63526514dc",
+   "md5": "5275f89c95f0ce47c46b2b13ea1b8bcb",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/thumbnails/thumbnail_B0SYNTHAU1_AUDI_portrait.jpg",
+   "type": "file",
+   "size": "204",
+   "sha256": "67d4b58037526d714c2b5c5401f2bb0c725dff3363eb176f993744d26c4ece71",
+   "md5": "4b730a56d388d2ad73f0cd75f35a6b35",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/browser/kindle_browser",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/browser/kindle_browser/Cache",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/browser/kindle_browser/Code Cache",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/browser/kindle_browser/Cache/data_1",
+   "type": "file",
+   "size": "8960",
+   "sha256": "c56a9eb655a9d99795e49845c92f653b0b99fdc3d1b228346c8d846e6b9621f4",
+   "md5": "40a8c1fe094266e50ce86f2b18c6bc7c",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "system/browser/kindle_browser/Code Cache/0f1e2d3c4b5a6978_0",
+   "type": "file",
+   "size": "127",
+   "sha256": "cc84c1540bff895ff40752549c52c810064517b95dc4932a5abb1c2b2b820654",
+   "md5": "d1083f47f602af899b392cf3917c5f0b",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": "audible/default.audible.db",
+   "type": "file",
+   "size": "<varies>",
+   "sha256": "<varies>",
+   "md5": "<varies>",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "A",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": ".active_content_sandbox/store",
+   "type": "folder",
+   "size": "",
+   "sha256": "",
+   "md5": "",
+   "modified_stored": "2026-11-15T04:13:20",
+   "created_stored": "2026-11-15T04:13:21",
+   "accessed_stored": "2026-11-15",
+   "modified_utc": "",
+   "created_utc": "",
+   "accessed_utc": "",
+   "attributes": "",
+   "status": "ok",
+   "detail": ""
+  },
+  {
+   "rel_path": ".active_content_sandbox/store/https_store.example_0.localstorage",
    "type": "file",
    "size": "<varies>",
    "sha256": "<varies>",
@@ -259,9 +563,9 @@
   {
    "rel_path": "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr",
    "type": "file",
-   "size": "451",
-   "sha256": "f6ee78cc7ee24159c31bc469df6564f9b62762041918c25e4db3bd31f1bf1b51",
-   "md5": "89c6ecff7a344e1173601b1a5423f3ae",
+   "size": "576",
+   "sha256": "578bdb8abc0e641c05b7d5354d2b4cb06b21ebf1cd561d3077e9ebbc7538fddb",
+   "md5": "039581c05582e1d3f3f68cb9caa1c000",
    "modified_stored": "2026-11-15T04:13:20",
    "created_stored": "2026-11-15T04:13:21",
    "accessed_stored": "2026-11-15",
@@ -328,7 +632,7 @@
    "type": "file",
    "size": "2109",
    "first_cluster": "330",
-   "entry_offset": "51744",
+   "entry_offset": "183840",
    "modified_stored": "2026-11-15T04:13:20",
    "created_stored": "2026-11-15T04:13:21",
    "accessed_stored": "2026-11-15",
@@ -346,7 +650,7 @@
    "type": "folder",
    "size": "",
    "first_cluster": "340",
-   "entry_offset": "51872",
+   "entry_offset": "183968",
    "modified_stored": "2026-11-15T04:13:20",
    "created_stored": "2026-11-15T04:13:21",
    "accessed_stored": "2026-11-15",
@@ -385,17 +689,23 @@
     "annotations_and_positions",
     "clippings",
     "lookups",
+    "activity_log",
+    "audiobooks",
+    "store_pages",
+    "browser_cache",
+    "reading_statistics",
     "files_created",
     "files_modified",
-    "deleted_entry_times",
-    "reading_statistics",
-    "queued_activity_records"
+    "deleted_entry_times"
    ],
    "rows": [
     [
      "2026-02-21",
      1,
      1,
+     0,
+     0,
+     0,
      0,
      0,
      0,
@@ -414,6 +724,9 @@
      0,
      0,
      0,
+     0,
+     0,
+     0,
      0
     ],
     [
@@ -426,14 +739,20 @@
      0,
      0,
      0,
+     0,
+     0,
+     0,
      0
     ],
     [
      "2026-03-04",
-     4,
-     2,
+     23,
+     3,
      0,
      2,
+     18,
+     0,
+     0,
      0,
      0,
      0,
@@ -442,8 +761,11 @@
     ],
     [
      "2026-03-05",
-     2,
-     2,
+     3,
+     3,
+     0,
+     0,
+     0,
      0,
      0,
      0,
@@ -462,6 +784,54 @@
      0,
      0,
      0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-08",
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-12",
+     2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     2,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-15",
+     2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     2,
+     0,
+     0,
+     0,
+     0,
      0
     ],
     [
@@ -474,13 +844,19 @@
      0,
      0,
      0,
+     0,
+     0,
+     0,
      0
     ],
     [
      "2026-03-19",
-     3,
+     7,
      2,
      1,
+     0,
+     4,
+     0,
      0,
      0,
      0,
@@ -490,15 +866,302 @@
     ],
     [
      "2026-11-15",
-     28,
+     49,
      0,
      0,
      0,
-     11,
-     11,
+     0,
+     0,
+     0,
+     1,
+     0,
+     21,
+     21,
+     6
+    ]
+   ]
+  },
+  "activity_records": {
+   "columns": [
+    "created_utc",
+    "schema_name",
+    "record",
+    "app_session_id",
+    "reading_session_id",
+    "sequence_number",
+    "row_id",
+    "state",
+    "page_versions",
+    "first_found_in",
+    "created_timestamp",
+    "source_file"
+   ],
+   "rows": [
+    [
+     "2026-03-04T02:10:00.500+00:00",
+     "ereader_framework_connectivity",
+     "{\"connection_name\":\"wireless\",\"connection_state\":\"wifi\",\"is_changed\":1}",
+     1,
+     "",
+     1,
+     1,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590200500,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:10:02.100+00:00",
+     "ereader_open_book",
+     "{\"book_category\":\"EBOK\",\"load_method\":\"catalog\",\"start_reading_position\":9100}",
+     1,
+     1,
+     2,
+     2,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590202100,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:11:00.000+00:00",
+     "ereader_book_page_turn",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     1,
+     1,
+     3,
+     3,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590260000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:11:00.050+00:00",
+     "ereader_book_consume_content",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9180,\"start_position\":9100}",
+     1,
+     1,
+     4,
+     4,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590260050,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:12:00.000+00:00",
+     "ereader_book_page_turn",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     1,
+     1,
+     5,
+     5,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590320000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:12:00.050+00:00",
+     "ereader_book_consume_content",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9260,\"start_position\":9180}",
+     1,
+     1,
      6,
-     0,
-     0
+     6,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590320050,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:13:00.000+00:00",
+     "ereader_book_page_turn",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     1,
+     1,
+     7,
+     7,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590380000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:13:00.050+00:00",
+     "ereader_book_consume_content",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9340,\"start_position\":9260}",
+     1,
+     1,
+     8,
+     8,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590380050,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:14:00.000+00:00",
+     "ereader_book_page_turn",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     1,
+     1,
+     9,
+     9,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590440000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:14:00.050+00:00",
+     "ereader_book_consume_content",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9420,\"start_position\":9340}",
+     1,
+     1,
+     10,
+     10,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590440050,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:15:00.000+00:00",
+     "ereader_book_page_turn",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     1,
+     1,
+     11,
+     11,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590500000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:15:00.050+00:00",
+     "ereader_book_consume_content",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9500,\"start_position\":9420}",
+     1,
+     1,
+     12,
+     12,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590500050,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:16:40.000+00:00",
+     "kindle_metrics_library_size",
+     "{\"all\":12,\"audiobooks\":1,\"audiobooks_downloaded\":0,\"books\":7,\"books_downloaded\":3,\"documents\":2,\"documents_downloaded\":1}",
+     1,
+     "",
+     13,
+     13,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590600000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:17:00.000+00:00",
+     "ereader_close_book",
+     "{\"close_method\":\"GoingToScreensaver\",\"close_position\":9500,\"close_timestamp\":1772590620000}",
+     1,
+     1,
+     14,
+     14,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590620000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:17:01.000+00:00",
+     "ereader_powerd_state_change",
+     "{\"curr_state\":\"SCREEN SAVER\",\"prev_state\":\"ACTIVE\"}",
+     1,
+     "",
+     15,
+     15,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590621000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:17:10.000+00:00",
+     "ereader_framework_connectivity",
+     "{\"connection_name\":\"wireless\",\"connection_state\":\"none\",\"is_changed\":1}",
+     1,
+     "",
+     16,
+     16,
+     "earlier page version",
+     "<varies>",
+     "<varies>",
+     1772590630000,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-19T20:40:00.100+00:00",
+     "ereader_hibernate_wakeup",
+     "{\"time_in_hibernate_ms\":3600000,\"wakeup_reason\":\"POWERD_WAKEUP_REASON_POWER_BUTTON\"}",
+     2,
+     "",
+     1,
+     1,
+     "current row",
+     "<varies>",
+     "<varies>",
+     1773952800100,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-19T20:40:00.300+00:00",
+     "ereader_framework_connectivity",
+     "{\"connection_name\":\"wireless\",\"connection_state\":\"wifi\",\"is_changed\":1}",
+     2,
+     "",
+     2,
+     2,
+     "current row",
+     "<varies>",
+     "<varies>",
+     1773952800300,
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-19T20:40:30.000+00:00",
+     "ereader_book_page_turn",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"PDOC\"}",
+     2,
+     2,
+     3,
+     3,
+     "current row",
+     "<varies>",
+     "<varies>",
+     1773952830000,
+     "system/fmcache/fmcache.db"
     ]
    ]
   },
@@ -633,6 +1296,188 @@
      "0￼0",
      "[\"AW1AAAA:6100\", \"AW1AAAA:6100\", 1771718751000, 1771718751000, \"0￼0\"]",
      "deleted/000003/Harbour Pilot Manual_B0SYNTH004.yjr"
+    ]
+   ]
+  },
+  "app_sessions": {
+   "columns": [
+    "app_session_id",
+    "start_utc",
+    "end_utc",
+    "duration_seconds",
+    "is_complete",
+    "time_zone",
+    "device_serial_number",
+    "device_model",
+    "device_type",
+    "customer_id",
+    "country_of_residence",
+    "preferred_marketplace_id",
+    "os_version",
+    "app_version",
+    "records",
+    "last_record_utc",
+    "state",
+    "page_versions",
+    "session",
+    "source_file"
+   ],
+   "rows": [
+    [
+     1,
+     "2026-03-04T02:10:00.000+00:00",
+     "2026-03-04T02:17:11.000+00:00",
+     431.0,
+     "yes",
+     "America/Chicago",
+     "G000XX0000000000",
+     "A0SYNTHMODEL",
+     "A0SYNTHMODEL",
+     "amzn1.account.SYNTHETICACCOUNT0001",
+     "US",
+     "A0SYNTHMARKET",
+     "synthetic.os",
+     "1",
+     16,
+     "2026-03-04T02:17:10.000+00:00",
+     "earlier page version",
+     "<varies>",
+     "{\"created_timestamp\":1772590200000,\"payload\":{\"app_version\":\"1\",\"country_of_residence\":\"US\",\"customer_id\":\"amzn1.account.SYNTHETICACCOUNT0001\",\"device_model\":\"A0SYNTHMODEL\",\"device_serial_number\":\"G000XX0000000000\",\"device_type\":\"A0SYNTHMODEL\",\"end_timestamp\":1772590631000,\"is_complete\":true,\"os_version\":\"synthetic.os\",\"preferred_marketplace_id\":\"A0SYNTHMARKET\",\"start_timestamp\":1772590200000,\"time_zone\":\"America/Chicago\"},\"schema_name\":\"app_session\",\"schema_version\":0,\"sent_timestamp\":1772590631000,\"sequence_number\":1}",
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     2,
+     "2026-03-19T20:40:00.000+00:00",
+     "",
+     "",
+     "no",
+     "America/Chicago",
+     "G000XX0000000000",
+     "A0SYNTHMODEL",
+     "A0SYNTHMODEL",
+     "amzn1.account.SYNTHETICACCOUNT0001",
+     "US",
+     "A0SYNTHMARKET",
+     "synthetic.os",
+     "1",
+     3,
+     "2026-03-19T20:40:30.000+00:00",
+     "current row",
+     "<varies>",
+     "{\"created_timestamp\":1773952800000,\"payload\":{\"app_version\":\"1\",\"country_of_residence\":\"US\",\"customer_id\":\"amzn1.account.SYNTHETICACCOUNT0001\",\"device_model\":\"A0SYNTHMODEL\",\"device_serial_number\":\"G000XX0000000000\",\"device_type\":\"A0SYNTHMODEL\",\"end_timestamp\":null,\"is_complete\":false,\"os_version\":\"synthetic.os\",\"preferred_marketplace_id\":\"A0SYNTHMARKET\",\"start_timestamp\":1773952800000,\"time_zone\":\"America/Chicago\"},\"schema_name\":\"app_session\",\"schema_version\":0,\"sent_timestamp\":1773952800000,\"sequence_number\":1}",
+     "system/fmcache/fmcache.db"
+    ]
+   ]
+  },
+  "audiobook_links": {
+   "columns": [
+    "ebook_title",
+    "ebook_asin",
+    "ebook_format",
+    "audiobook_title",
+    "audiobook_asin",
+    "audiobook_format",
+    "audiobook_owned",
+    "last_fetched_utc",
+    "e_acr",
+    "a_acr",
+    "sync_file_acr",
+    "source_file"
+   ],
+   "rows": [
+    [
+     "A Short History of Lighthouses",
+     "B0SYNTH002",
+     "YJBINARY",
+     "",
+     "B0SYNTHAU1",
+     "AAX_22",
+     1,
+     "2026-03-08T13:00:00.000+00:00",
+     "CR!SYNTHE1",
+     "CR!SYNTHA1",
+     "CR!SYNTHS1",
+     "audible/default.audible.db"
+    ]
+   ]
+  },
+  "audiobook_positions": {
+   "columns": [
+    "title",
+    "asin",
+    "type",
+    "position",
+    "position_ms",
+    "end_position_ms",
+    "created_utc",
+    "updated_utc",
+    "source_device",
+    "lto",
+    "notes",
+    "source_file"
+   ],
+   "rows": [
+    [
+     "",
+     "B0SYNTHAU1",
+     "REMOTE_LPH",
+     "1:23:45",
+     5025000,
+     5025000,
+     "2026-03-08T13:05:00.000+00:00",
+     "2026-03-08T13:05:00.000+00:00",
+     "Synthetic phone app",
+     -300,
+     "",
+     "audible/default.audible.db"
+    ]
+   ]
+  },
+  "browser_cache": {
+   "columns": [
+    "created_utc",
+    "created_stored",
+    "host",
+    "url",
+    "body_bytes",
+    "cache_format",
+    "cache_key",
+    "record",
+    "rel_path"
+   ],
+   "rows": [
+    [
+     "2026-03-12T18:30:00.000+00:00",
+     "2026-11-15T04:13:21",
+     "portal.example.net",
+     "https://portal.example.net/login?session=1",
+     4100,
+     "block file",
+     "https://portal.example.net/login?session=1",
+     "entry record at byte 8192",
+     "system/browser/kindle_browser/Cache/data_1"
+    ],
+    [
+     "2026-03-12T18:34:00.000+00:00",
+     "2026-11-15T04:13:21",
+     "www.example.org",
+     "https://www.example.org/harbour/tides",
+     15250,
+     "block file",
+     "1/0/_dk_https://example.org https://example.org https://www.example.org/harbour/tides",
+     "entry record at byte 8448",
+     "system/browser/kindle_browser/Cache/data_1"
+    ],
+    [
+     "",
+     "2026-11-15T04:13:21",
+     "static.example.org",
+     "https://static.example.org/site.js",
+     "127",
+     "simple file",
+     "1/0/https://static.example.org/site.js",
+     "whole file",
+     "system/browser/kindle_browser/Code Cache/0f1e2d3c4b5a6978_0"
     ]
    ]
   },
@@ -826,6 +1671,46 @@
     ]
    ]
   },
+  "connectivity": {
+   "columns": [
+    "time_utc",
+    "connection_name",
+    "connection_state",
+    "is_changed",
+    "app_session_id",
+    "state",
+    "source_file"
+   ],
+   "rows": [
+    [
+     "2026-03-04T02:10:00.500+00:00",
+     "wireless",
+     "wifi",
+     1,
+     1,
+     "earlier page version",
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-04T02:17:10.000+00:00",
+     "wireless",
+     "none",
+     1,
+     1,
+     "earlier page version",
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-19T20:40:00.300+00:00",
+     "wireless",
+     "wifi",
+     1,
+     2,
+     "current row",
+     "system/fmcache/fmcache.db"
+    ]
+   ]
+  },
   "content_files": {
    "columns": [
     "rel_path",
@@ -951,6 +1836,42 @@
      "WORDS",
      4,
      "id, word, stem, lang, category, timestamp, profileid"
+    ],
+    [
+     "system/fmcache/fmcache.db",
+     "app_sessions",
+     1,
+     "id, encoded_size, session, dummy_session"
+    ],
+    [
+     "system/fmcache/fmcache.db",
+     "reading_sessions",
+     1,
+     "id, encoded_size, session, dummy_session"
+    ],
+    [
+     "system/fmcache/fmcache.db",
+     "records",
+     3,
+     "id, schema_name, schema_version, app_session_id, reading_session_id, encoded_size, sequence_number, created_timestamp, priority, record"
+    ],
+    [
+     "audible/default.audible.db",
+     "ANNOTATIONS",
+     1,
+     "ASIN, START_POS_MS, END_POS_MS, CREATION_DATE, LAST_UPDATED_DATE, NOTES, SRC_DEVICE, LTO, TYPE"
+    ],
+    [
+     "audible/default.audible.db",
+     "relationships",
+     1,
+     "e_asin, e_acr, e_version, e_format, a_asin, a_acr, a_version, a_format, amz_asin, sync_file_acr, is_audiobook_owned, time_last_fetched"
+    ],
+    [
+     ".active_content_sandbox/store/https_store.example_0.localstorage",
+     "ItemTable",
+     4,
+     "key, value"
     ]
    ]
   },
@@ -981,7 +1902,7 @@
      "file",
      "2109",
      "330",
-     "51744",
+     "183840",
      "2026-11-15T04:13:20",
      "2026-11-15T04:13:21",
      "2026-11-15",
@@ -1000,7 +1921,7 @@
      "folder",
      "",
      "340",
-     "51872",
+     "183968",
      "2026-11-15T04:13:20",
      "2026-11-15T04:13:21",
      "2026-11-15",
@@ -1089,8 +2010,86 @@
     [
      "Device",
      "free clusters",
-     351,
+     222,
      "acquisition_log.json"
+    ],
+    [
+     "Device",
+     "time zone setting",
+     "America/Chicago",
+     "app_sessions, session 2"
+    ],
+    [
+     "Device",
+     "device model code",
+     "A0SYNTHMODEL",
+     "app_sessions, session 2"
+    ],
+    [
+     "Device",
+     "serial number in the activity log",
+     "G000XX0000000000",
+     "app_sessions, session 2"
+    ],
+    [
+     "Device",
+     "account ID",
+     "amzn1.account.SYNTHETICACCOUNT0001",
+     "app_sessions, session 2"
+    ],
+    [
+     "Device",
+     "country of residence",
+     "US",
+     "app_sessions, session 2"
+    ],
+    [
+     "Device",
+     "software",
+     "synthetic.os",
+     "app_sessions, session 2"
+    ],
+    [
+     "Library",
+     "library count: all",
+     12,
+     "activity_records, 2026-03-04T02:16:40.000+00:00"
+    ],
+    [
+     "Library",
+     "library count: books",
+     7,
+     "activity_records, 2026-03-04T02:16:40.000+00:00"
+    ],
+    [
+     "Library",
+     "library count: books downloaded",
+     3,
+     "activity_records, 2026-03-04T02:16:40.000+00:00"
+    ],
+    [
+     "Library",
+     "library count: audiobooks",
+     1,
+     "activity_records, 2026-03-04T02:16:40.000+00:00"
+    ],
+    [
+     "Library",
+     "library count: audiobooks downloaded",
+     0,
+     "activity_records, 2026-03-04T02:16:40.000+00:00"
+    ],
+    [
+     "Library",
+     "library count: documents",
+     2,
+     "activity_records, 2026-03-04T02:16:40.000+00:00"
+    ],
+    [
+     "Library",
+     "library count: documents downloaded",
+     1,
+     "activity_records, 2026-03-04T02:16:40.000+00:00"
     ],
     [
      "Acquisition",
@@ -1137,7 +2136,7 @@
     [
      "Acquisition",
      "files copied and verified",
-     11,
+     21,
      "acquisition_log.json"
     ],
     [
@@ -1149,13 +2148,13 @@
     [
      "Content",
      "files",
-     11,
+     21,
      "manifest.csv"
     ],
     [
      "Content",
      "folders",
-     9,
+     18,
      "manifest.csv"
     ],
     [
@@ -1238,8 +2237,92 @@
     ],
     [
      "Records",
+     "activity records in the database now",
+     3,
+     "activity_records"
+    ],
+    [
+     "Records",
+     "activity records only in earlier page versions",
+     16,
+     "activity_records"
+    ],
+    [
+     "Records",
+     "reading sessions",
+     2,
+     "reading_sessions"
+    ],
+    [
+     "Records",
+     "app sessions",
+     2,
+     "app_sessions"
+    ],
+    [
+     "Records",
+     "connectivity records",
+     3,
+     "connectivity"
+    ],
+    [
+     "Records",
+     "power and screen records",
+     2,
+     "power_events"
+    ],
+    [
+     "Records",
+     "page history records",
+     2,
+     "page_history"
+    ],
+    [
+     "Records",
+     "audiobook positions",
+     1,
+     "audiobook_positions"
+    ],
+    [
+     "Records",
+     "book and audiobook links",
+     1,
+     "audiobook_links"
+    ],
+    [
+     "Records",
+     "store page records",
+     4,
+     "store_storage"
+    ],
+    [
+     "Records",
+     "browser cache entries",
+     3,
+     "browser_cache"
+    ],
+    [
+     "Records",
+     "browser cache hosts",
+     3,
+     "browser_cache"
+    ],
+    [
+     "Records",
+     "thumbnail items",
+     4,
+     "thumbnails"
+    ],
+    [
+     "Records",
+     "thumbnail items with a document file present",
+     2,
+     "thumbnails"
+    ],
+    [
+     "Records",
      "timeline events",
-     52,
+     102,
      "timeline"
     ],
     [
@@ -1530,6 +2613,90 @@
     ]
    ]
   },
+  "fmcache_app_sessions": {
+   "columns": [
+    "id",
+    "encoded_size",
+    "session",
+    "dummy_session"
+   ],
+   "rows": [
+    [
+     2,
+     517,
+     "{\"created_timestamp\":1773952800000,\"payload\":{\"app_version\":\"1\",\"country_of_residence\":\"US\",\"customer_id\":\"amzn1.account.SYNTHETICACCOUNT0001\",\"device_model\":\"A0SYNTHMODEL\",\"device_serial_number\":\"G000XX0000000000\",\"device_type\":\"A0SYNTHMODEL\",\"end_timestamp\":null,\"is_complete\":false,\"os_version\":\"synthetic.os\",\"preferred_marketplace_id\":\"A0SYNTHMARKET\",\"start_timestamp\":1773952800000,\"time_zone\":\"America/Chicago\"},\"schema_name\":\"app_session\",\"schema_version\":0,\"sent_timestamp\":1773952800000,\"sequence_number\":1}",
+     0
+    ]
+   ]
+  },
+  "fmcache_reading_sessions": {
+   "columns": [
+    "id",
+    "encoded_size",
+    "session",
+    "dummy_session"
+   ],
+   "rows": [
+    [
+     2,
+     393,
+     "{\"created_timestamp\":1773952801000,\"payload\":{\"asin\":\"\",\"content_type\":\"PDOC\",\"embedded_id\":\"0A1B2C3D4E5F60718293A4B5C6D7E8F9\",\"end_reading_location\":5200,\"end_timestamp\":null,\"format\":\"PDF\",\"is_complete\":false,\"max_position\":5300,\"start_reading_location\":1,\"start_timestamp\":1773952801000},\"schema_name\":\"reading_session\",\"schema_version\":0,\"sent_timestamp\":1773952801000,\"sequence_number\":1}",
+     0
+    ]
+   ]
+  },
+  "fmcache_records": {
+   "columns": [
+    "id",
+    "schema_name",
+    "schema_version",
+    "app_session_id",
+    "reading_session_id",
+    "encoded_size",
+    "sequence_number",
+    "created_timestamp",
+    "priority",
+    "record"
+   ],
+   "rows": [
+    [
+     1,
+     "ereader_hibernate_wakeup",
+     "0",
+     2,
+     "",
+     84,
+     1,
+     1773952800100,
+     0,
+     "{\"time_in_hibernate_ms\":3600000,\"wakeup_reason\":\"POWERD_WAKEUP_REASON_POWER_BUTTON\"}"
+    ],
+    [
+     2,
+     "ereader_framework_connectivity",
+     "0",
+     2,
+     "",
+     71,
+     2,
+     1773952800300,
+     0,
+     "{\"connection_name\":\"wireless\",\"connection_state\":\"wifi\",\"is_changed\":1}"
+    ],
+    [
+     3,
+     "ereader_book_page_turn",
+     "0",
+     2,
+     2,
+     58,
+     3,
+     1773952830000,
+     0,
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"PDOC\"}"
+    ]
+   ]
+  },
   "observations": {
    "columns": [
     "check",
@@ -1559,6 +2726,31 @@
     ]
    ]
   },
+  "page_history": {
+   "columns": [
+    "book_key",
+    "file_state",
+    "position",
+    "time_utc",
+    "sidecar_file"
+   ],
+   "rows": [
+    [
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "allocated",
+     "AZ0AAAA:120",
+     "2026-03-04T02:11:00.000+00:00",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "allocated",
+     "AZ0BAAA:9000",
+     "2026-03-05T00:58:00.000+00:00",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ]
+   ]
+  },
   "parse_errors": {
    "columns": [
     "file",
@@ -1566,6 +2758,37 @@
     "error"
    ],
    "rows": []
+  },
+  "power_events": {
+   "columns": [
+    "time_utc",
+    "event",
+    "detail",
+    "app_session_id",
+    "state",
+    "record",
+    "source_file"
+   ],
+   "rows": [
+    [
+     "2026-03-04T02:17:01.000+00:00",
+     "ereader_powerd_state_change",
+     "ACTIVE -> SCREEN SAVER",
+     1,
+     "earlier page version",
+     "{\"curr_state\":\"SCREEN SAVER\",\"prev_state\":\"ACTIVE\"}",
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     "2026-03-19T20:40:00.100+00:00",
+     "ereader_hibernate_wakeup",
+     "POWERD_WAKEUP_REASON_POWER_BUTTON after 3600000 ms in hibernation",
+     2,
+     "current row",
+     "{\"time_in_hibernate_ms\":3600000,\"wakeup_reason\":\"POWERD_WAKEUP_REASON_POWER_BUTTON\"}",
+     "system/fmcache/fmcache.db"
+    ]
+   ]
   },
   "reading_positions": {
    "columns": [
@@ -1625,6 +2848,91 @@
     ]
    ]
   },
+  "reading_sessions": {
+   "columns": [
+    "reading_session_id",
+    "title",
+    "asin",
+    "start_utc",
+    "end_utc",
+    "duration_seconds",
+    "is_complete",
+    "page_turns",
+    "records",
+    "last_record_utc",
+    "open_position",
+    "first_position_read",
+    "last_position_read",
+    "close_method",
+    "close_position",
+    "start_reading_location",
+    "end_reading_location",
+    "max_position",
+    "content_type",
+    "format",
+    "app_session_ids",
+    "state",
+    "page_versions",
+    "session",
+    "source_file"
+   ],
+   "rows": [
+    [
+     1,
+     "Tidewater Engineering Handbook",
+     "B0SYNTH001",
+     "2026-03-04T02:10:02.000+00:00",
+     "2026-03-04T02:17:00.000+00:00",
+     418.0,
+     "yes",
+     5,
+     12,
+     "2026-03-04T02:17:00.000+00:00",
+     9100,
+     9100,
+     9500,
+     "GoingToScreensaver",
+     9500,
+     1,
+     5200,
+     5300,
+     "EBOK",
+     "YJ",
+     "1",
+     "earlier page version",
+     "<varies>",
+     "{\"created_timestamp\":1772590202000,\"payload\":{\"asin\":\"B0SYNTH001\",\"content_type\":\"EBOK\",\"end_reading_location\":5200,\"end_timestamp\":1772590620000,\"format\":\"YJ\",\"is_complete\":true,\"max_position\":5300,\"start_reading_location\":1,\"start_timestamp\":1772590202000},\"schema_name\":\"reading_session\",\"schema_version\":0,\"sent_timestamp\":1772590620000,\"sequence_number\":1}",
+     "system/fmcache/fmcache.db"
+    ],
+    [
+     2,
+     "Q3 operations review",
+     "",
+     "2026-03-19T20:40:01.000+00:00",
+     "",
+     "",
+     "no",
+     1,
+     1,
+     "2026-03-19T20:40:30.000+00:00",
+     "",
+     "",
+     "",
+     "",
+     "",
+     1,
+     5200,
+     5300,
+     "PDOC",
+     "PDF",
+     "2",
+     "current row",
+     "<varies>",
+     "{\"created_timestamp\":1773952801000,\"payload\":{\"asin\":\"\",\"content_type\":\"PDOC\",\"embedded_id\":\"0A1B2C3D4E5F60718293A4B5C6D7E8F9\",\"end_reading_location\":5200,\"end_timestamp\":null,\"format\":\"PDF\",\"is_complete\":false,\"max_position\":5300,\"start_reading_location\":1,\"start_timestamp\":1773952801000},\"schema_name\":\"reading_session\",\"schema_version\":0,\"sent_timestamp\":1773952801000,\"sequence_number\":1}",
+     "system/fmcache/fmcache.db"
+    ]
+   ]
+  },
   "sidecar_fields": {
    "columns": [
     "book_key",
@@ -1647,6 +2955,13 @@
      "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr",
      "lpr",
      "[2, \"AZ0CAAA:14466\", 1772674200000]"
+    ],
+    [
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr",
+     "page.history.store",
+     "[2, {\"name\": \"page.history.record\", \"values\": [\"AZ0AAAA:120\", 1772590260000]}, {\"name\": \"page.history.record\", \"values\": [\"AZ0BAAA:9000\", 1772672280000]}]"
     ],
     [
      "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
@@ -1721,10 +3036,10 @@
      "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
      "allocated",
      "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr",
-     "451",
-     "f6ee78cc7ee24159c31bc469df6564f9b62762041918c25e4db3bd31f1bf1b51",
+     "576",
+     "578bdb8abc0e641c05b7d5354d2b4cb06b21ebf1cd561d3077e9ebbc7538fddb",
      "2026-11-15T04:13:20",
-     2
+     3
     ],
     [
      "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
@@ -1761,6 +3076,119 @@
      "6a8e480b2f56a8b4b0f4fccf27c68eeb01eee83447bff0bfd7e7c92245009e52",
      "2026-11-15T04:13:20",
      2
+    ]
+   ]
+  },
+  "store_storage": {
+   "columns": [
+    "time_utc",
+    "kind",
+    "url",
+    "asin",
+    "ttl_ms",
+    "value_bytes",
+    "key",
+    "value",
+    "source_file"
+   ],
+   "rows": [
+    [
+     "2026-03-15T22:04:00.000+00:00",
+     "index",
+     "/store/detail",
+     "B0SYNTH003",
+     900000,
+     102,
+     "*index*_{\"url\":\"/store/detail\",\"params\":{\"asin\":\"B0SYNTH003\"}}",
+     "{\"created\":1773612240000,\"TTL\":900000,\"attrs\":null}",
+     ".active_content_sandbox/store/https_store.example_0.localstorage"
+    ],
+    [
+     "2026-03-15T22:05:00.000+00:00",
+     "prefs",
+     "",
+     "",
+     "",
+     26,
+     "*prefs*_lastStoreAccess",
+     "1773612300000",
+     ".active_content_sandbox/store/https_store.example_0.localstorage"
+    ],
+    [
+     "",
+     "cache",
+     "/store/detail",
+     "B0SYNTH003",
+     "",
+     102,
+     "*cache*_{\"url\":\"/store/detail\",\"params\":{\"asin\":\"B0SYNTH003\"}}",
+     "{\"title\":\"Notes on Contract Drafting\",\"price\":4.99}",
+     ".active_content_sandbox/store/https_store.example_0.localstorage"
+    ],
+    [
+     "",
+     "prefs",
+     "",
+     "",
+     "",
+     72,
+     "*prefs*_userid",
+     "\"amzn1.account.SYNTHETICACCOUNT0001\"",
+     ".active_content_sandbox/store/https_store.example_0.localstorage"
+    ]
+   ]
+  },
+  "thumbnails": {
+   "columns": [
+    "item_id",
+    "title",
+    "content_code",
+    "document_present",
+    "created_stored",
+    "modified_stored",
+    "size",
+    "rel_path"
+   ],
+   "rows": [
+    [
+     "B0SYNTH001",
+     "Tidewater Engineering Handbook",
+     "EBOK",
+     "yes",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "204",
+     "system/thumbnails/thumbnail_B0SYNTH001_EBOK_portrait.jpg"
+    ],
+    [
+     "B0SYNTH002",
+     "A Short History of Lighthouses",
+     "EBOK",
+     "yes",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "204",
+     "system/thumbnails/thumbnail_B0SYNTH002_EBOK_portrait.jpg"
+    ],
+    [
+     "B0SYNTH777",
+     "",
+     "EBSP",
+     "no",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "204",
+     "system/thumbnails/thumbnail_B0SYNTH777_EBSP_portrait.jpg"
+    ],
+    [
+     "B0SYNTHAU1",
+     "",
+     "AUDI",
+     "no",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "204",
+     "system/thumbnails/thumbnail_B0SYNTHAU1_AUDI_portrait.jpg"
     ]
    ]
   },
@@ -1833,6 +3261,105 @@
      "documents/My Clippings.txt entry 2"
     ],
     [
+     "2026-03-04T02:10:00.500+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_framework_connectivity",
+     "",
+     "{\"connection_name\":\"wireless\",\"connection_state\":\"wifi\",\"is_changed\":1}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 1"
+    ],
+    [
+     "2026-03-04T02:10:02.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "reading session started",
+     "Tidewater Engineering Handbook",
+     "session 1 | ASIN B0SYNTH001 | locations 1 to 5200",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db reading_sessions id 1"
+    ],
+    [
+     "2026-03-04T02:10:02.100+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_open_book",
+     "",
+     "{\"book_category\":\"EBOK\",\"load_method\":\"catalog\",\"start_reading_position\":9100}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 2"
+    ],
+    [
+     "2026-03-04T02:11:00.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_page_turn",
+     "",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 3"
+    ],
+    [
+     "2026-03-04T02:11:00.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "page history record",
+     "Tidewater Engineering Handbook",
+     "position AZ0AAAA:120",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     "2026-03-04T02:11:00.050+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_consume_content",
+     "",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9180,\"start_position\":9100}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 4"
+    ],
+    [
+     "2026-03-04T02:12:00.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_page_turn",
+     "",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 5"
+    ],
+    [
+     "2026-03-04T02:12:00.050+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_consume_content",
+     "",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9260,\"start_position\":9180}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 6"
+    ],
+    [
+     "2026-03-04T02:13:00.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_page_turn",
+     "",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 7"
+    ],
+    [
      "2026-03-04T02:13:00.000+00:00",
      "UTC, from the device clock",
      "vocabulary database",
@@ -1842,6 +3369,39 @@
      "allocated",
      "",
      "system/vocabulary/vocab.db"
+    ],
+    [
+     "2026-03-04T02:13:00.050+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_consume_content",
+     "",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9340,\"start_position\":9260}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 8"
+    ],
+    [
+     "2026-03-04T02:14:00.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_page_turn",
+     "",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 9"
+    ],
+    [
+     "2026-03-04T02:14:00.050+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_consume_content",
+     "",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9420,\"start_position\":9340}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 10"
     ],
     [
      "2026-03-04T02:14:22.000+00:00",
@@ -1855,6 +3415,28 @@
      "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
     ],
     [
+     "2026-03-04T02:15:00.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_page_turn",
+     "",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"EBOK\"}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 11"
+    ],
+    [
+     "2026-03-04T02:15:00.050+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_consume_content",
+     "",
+     "{\"context\":\"Book:Reading:MainContent\",\"end_position\":9500,\"start_position\":9420}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 12"
+    ],
+    [
      "2026-03-04T02:15:40.000+00:00",
      "UTC, from the device clock",
      "sidecar",
@@ -1866,6 +3448,61 @@
      "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
     ],
     [
+     "2026-03-04T02:16:40.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "kindle_metrics_library_size",
+     "",
+     "{\"all\":12,\"audiobooks\":1,\"audiobooks_downloaded\":0,\"books\":7,\"books_downloaded\":3,\"documents\":2,\"documents_downloaded\":1}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 13"
+    ],
+    [
+     "2026-03-04T02:17:00.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_close_book",
+     "",
+     "{\"close_method\":\"GoingToScreensaver\",\"close_position\":9500,\"close_timestamp\":1772590620000}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 14"
+    ],
+    [
+     "2026-03-04T02:17:00.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "reading session ended",
+     "Tidewater Engineering Handbook",
+     "session 1 | ASIN B0SYNTH001 | locations 1 to 5200 | 5 page turns | closed by GoingToScreensaver",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db reading_sessions id 1"
+    ],
+    [
+     "2026-03-04T02:17:01.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_powerd_state_change",
+     "",
+     "{\"curr_state\":\"SCREEN SAVER\",\"prev_state\":\"ACTIVE\"}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 15"
+    ],
+    [
+     "2026-03-04T02:17:10.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_framework_connectivity",
+     "",
+     "{\"connection_name\":\"wireless\",\"connection_state\":\"none\",\"is_changed\":1}",
+     "earlier page version",
+     "",
+     "system/fmcache/fmcache.db records id 16"
+    ],
+    [
      "2026-03-04T02:20:00.000+00:00",
      "UTC, from the device clock",
      "vocabulary database",
@@ -1875,6 +3512,17 @@
      "allocated",
      "",
      "system/vocabulary/vocab.db"
+    ],
+    [
+     "2026-03-05T00:58:00.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "page history record",
+     "Tidewater Engineering Handbook",
+     "position AZ0BAAA:9000",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
     ],
     [
      "2026-03-05T01:02:09.000+00:00",
@@ -1976,6 +3624,61 @@
      "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr"
     ],
     [
+     "2026-03-08T13:05:00.000+00:00",
+     "UTC, from the device clock",
+     "audiobook database",
+     "audiobook position saved (REMOTE_LPH)",
+     "",
+     "ASIN B0SYNTHAU1 | position 1:23:45 | set by Synthetic phone app",
+     "allocated",
+     "",
+     "audible/default.audible.db"
+    ],
+    [
+     "2026-03-12T18:30:00.000+00:00",
+     "UTC, from the device clock",
+     "browser cache",
+     "browser cache entry created",
+     "",
+     "https://portal.example.net/login?session=1",
+     "allocated",
+     "",
+     "system/browser/kindle_browser/Cache/data_1, entry record at byte 8192"
+    ],
+    [
+     "2026-03-12T18:34:00.000+00:00",
+     "UTC, from the device clock",
+     "browser cache",
+     "browser cache entry created",
+     "",
+     "https://www.example.org/harbour/tides",
+     "allocated",
+     "",
+     "system/browser/kindle_browser/Cache/data_1, entry record at byte 8448"
+    ],
+    [
+     "2026-03-15T22:04:00.000+00:00",
+     "UTC, from the device clock",
+     "store pages",
+     "store page data saved (index)",
+     "",
+     "/store/detail | B0SYNTH003",
+     "allocated",
+     "",
+     ".active_content_sandbox/store/https_store.example_0.localstorage"
+    ],
+    [
+     "2026-03-15T22:05:00.000+00:00",
+     "UTC, from the device clock",
+     "store pages",
+     "store page data saved (prefs)",
+     "",
+     "*prefs*_lastStoreAccess",
+     "allocated",
+     "",
+     ".active_content_sandbox/store/https_store.example_0.localstorage"
+    ],
+    [
      "2026-03-16T12:31:05",
      "device local time, no time zone",
      "My Clippings.txt",
@@ -2018,6 +3721,50 @@
      "allocated",
      "",
      "documents/My Clippings.txt entry 6"
+    ],
+    [
+     "2026-03-19T20:40:00.100+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_hibernate_wakeup",
+     "",
+     "{\"time_in_hibernate_ms\":3600000,\"wakeup_reason\":\"POWERD_WAKEUP_REASON_POWER_BUTTON\"}",
+     "current row",
+     "",
+     "system/fmcache/fmcache.db records id 1"
+    ],
+    [
+     "2026-03-19T20:40:00.300+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_framework_connectivity",
+     "",
+     "{\"connection_name\":\"wireless\",\"connection_state\":\"wifi\",\"is_changed\":1}",
+     "current row",
+     "",
+     "system/fmcache/fmcache.db records id 2"
+    ],
+    [
+     "2026-03-19T20:40:01.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "reading session started",
+     "Q3 operations review",
+     "session 2 | ASIN  | locations 1 to 5200",
+     "current row",
+     "",
+     "system/fmcache/fmcache.db reading_sessions id 2"
+    ],
+    [
+     "2026-03-19T20:40:30.000+00:00",
+     "UTC, from the device clock",
+     "activity log",
+     "ereader_book_page_turn",
+     "",
+     "{\"action_id\":\"NextPageTurnWithTAP\",\"book_category\":\"PDOC\"}",
+     "current row",
+     "",
+     "system/fmcache/fmcache.db records id 3"
     ],
     [
      "2026-03-19T20:47:30.000+00:00",
@@ -2079,6 +3826,28 @@
      "FAT time as stored, no time zone",
      "file system",
      "file modified",
+     "",
+     ".active_content_sandbox/store/https_store.example_0.localstorage",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "audible/default.audible.db",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
      "A Short History of Lighthouses",
      "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.kfx",
      "allocated",
@@ -2179,6 +3948,94 @@
      "file system",
      "file modified",
      "",
+     "system/browser/kindle_browser/Cache/data_1",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/browser/kindle_browser/Code Cache/0f1e2d3c4b5a6978_0",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/fmcache/fmcache.db",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/fmcache/fmcache.db-wal",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTH001_EBOK_portrait.jpg",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTH002_EBOK_portrait.jpg",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTH777_EBSP_portrait.jpg",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTHAU1_AUDI_portrait.jpg",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
      "system/version.txt",
      "allocated",
      "",
@@ -2194,6 +4051,17 @@
      "allocated",
      "",
      "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "browser cache",
+     "browser cache file created",
+     "",
+     "https://static.example.org/site.js",
+     "allocated",
+     "",
+     "system/browser/kindle_browser/Code Cache/0f1e2d3c4b5a6978_0"
     ],
     [
      "2026-11-15T04:13:21",
@@ -2233,6 +4101,28 @@
      "FAT time as stored, no time zone",
      "file system",
      "file created",
+     "",
+     ".active_content_sandbox/store/https_store.example_0.localstorage",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "audible/default.audible.db",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
      "A Short History of Lighthouses",
      "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.kfx",
      "allocated",
@@ -2323,6 +4213,94 @@
      "file created",
      "",
      "documents/My Clippings.txt",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/browser/kindle_browser/Cache/data_1",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/browser/kindle_browser/Code Cache/0f1e2d3c4b5a6978_0",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/fmcache/fmcache.db",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/fmcache/fmcache.db-wal",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTH001_EBOK_portrait.jpg",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTH002_EBOK_portrait.jpg",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTH777_EBSP_portrait.jpg",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/thumbnails/thumbnail_B0SYNTHAU1_AUDI_portrait.jpg",
      "allocated",
      "",
      "manifest.csv"
