@@ -13,6 +13,8 @@ import csv
 import json
 from pathlib import Path
 
+from .util import csv_safe
+
 # Manifest columns compared when both sides have a value.
 FIELDS = ("size", "sha256", "modified_stored", "created_stored", "accessed_stored",
           "attributes", "status")
@@ -100,7 +102,9 @@ def write_differences(result, path):
     with open(path, "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=DIFFERENCE_COLUMNS)
         writer.writeheader()
-        writer.writerows(result["differences"])
+        # A path from a manifest must not run as a formula in a spreadsheet.
+        writer.writerows({key: csv_safe(value) for key, value in diff.items()}
+                         for diff in result["differences"])
 
 
 def describe(result):

@@ -18,7 +18,7 @@ import re
 
 from .fat32 import Fat32Error, Fat32Volume
 from .logical import MANIFEST_COLUMNS
-from .util import (hash_file, host_facts, long_path, prepare_output,
+from .util import (hash_file, host_facts, inside, long_path, prepare_output,
                    progress_printer, status, utc_now, write_json)
 
 DELETED_COLUMNS = [
@@ -93,7 +93,7 @@ def resolve_source(source):
             image_log = json.load(fh)
         if image_log.get("kind") != "image":
             raise ValueError("%s is not an image acquisition" % source)
-        image = os.path.join(source, image_log["image_file"])
+        image = str(inside(source, image_log["image_file"]))
         facts["image_log_sha256"] = image_log["source_hashes"]["sha256"]
         facts["image_status"] = image_log.get("status")
         facts["device"] = image_log.get("device")
@@ -168,6 +168,13 @@ def extract_image(source, out_dir, case=None, include_deleted=True, quiet=False)
                     if kind == "file":
                         clusters, reason = volume.deleted_file_clusters(entry)
                         row["detail"] = reason
+                        # Many deleted entries can name the same free space.
+                        # Stop before the copies outgrow the volume itself.
+                        if clusters and (counts["deleted_bytes_recovered"] + entry["size"]
+                                         > volume_bytes):
+                            clusters = []
+                            row["detail"] = ("not read back: the deleted files already read "
+                                             "back hold as much data as the volume can store")
                         if clusters:
                             rel = "deleted/%06d/%s" % (row["index"], _safe_component(entry["name"]))
                             dst = long_path(out / rel)

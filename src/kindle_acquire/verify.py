@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from .util import hash_file, long_path
+from .util import hash_file, inside, long_path
 
 
 def _unlisted(root, prefix, listed, record_name, result):
@@ -41,7 +41,7 @@ def verify(acq_dir):
         result["problems"].append("acquisition_log.json.sha256 is missing")
 
     if log.get("kind") == "image":
-        image = acq / log["image_file"]
+        image = inside(acq, log["image_file"])
         if not image.is_file():
             result["problems"].append("image file is missing: %s" % log["image_file"])
         else:
@@ -65,10 +65,9 @@ def verify(acq_dir):
                 expected.add(row["rel_path"])
                 if row["status"] != "ok":
                     continue
-                path = acq / "files" / row["rel_path"]
                 try:
-                    digest = hash_file(path)["sha256"]
-                except OSError as exc:
+                    digest = hash_file(inside(acq / "files", row["rel_path"]))["sha256"]
+                except (OSError, ValueError) as exc:
                     result["problems"].append("%s: %s" % (row["rel_path"], exc))
                     continue
                 result["checked"] += 1
@@ -87,8 +86,8 @@ def verify(acq_dir):
                         continue
                     recovered.add(row["recovered_file"])
                     try:
-                        digest = hash_file(acq / row["recovered_file"])["sha256"]
-                    except OSError as exc:
+                        digest = hash_file(inside(acq, row["recovered_file"]))["sha256"]
+                    except (OSError, ValueError) as exc:
                         result["problems"].append("%s: %s" % (row["recovered_file"], exc))
                         continue
                     result["checked"] += 1

@@ -12,7 +12,7 @@ import sqlite3
 from pathlib import Path
 
 from . import __version__
-from .util import hash_file, utc_now
+from .util import hash_file, open_db_readonly, utc_now
 
 _CSS = """
 body{font:14px/1.45 "Segoe UI",Arial,sans-serif;color:#1c1c1c;margin:0;background:#f3f3f1}
@@ -88,7 +88,7 @@ def find_parsed(folder):
 
 class _Db:
     def __init__(self, path):
-        self.con = sqlite3.connect(Path(path).resolve().as_uri() + "?mode=ro", uri=True)
+        self.con = open_db_readonly(path)
         self.con.row_factory = sqlite3.Row
         self.tables = set(r[0] for r in self.con.execute(
             "SELECT name FROM sqlite_master WHERE type='table'"))
@@ -172,6 +172,12 @@ def _render(db):
     title = " ".join(p for p in (fact("Acquisition", "case"),
                                  fact("Acquisition", "evidence item")) if p)
     w("<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>")
+    # Second line of defence behind the escaping: the browser runs no script and
+    # loads nothing from outside the file.
+    w("<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; "
+      "img-src data:; style-src 'unsafe-inline'; base-uri 'none'; "
+      "form-action 'none'\">")
+    w('<meta name="referrer" content="no-referrer">')
     w("<title>%s</title>" % _e("Kindle examination record " + title).strip())
     w("<style>%s</style></head><body><main>" % _CSS)
     logo = _logo()

@@ -16,13 +16,12 @@ import json
 import os
 import re
 import shutil
-import sqlite3
 import tempfile
 from pathlib import Path
 
 from . import __version__
 from .report import _container, parse_acquisition
-from .util import long_path, utc_now, write_json
+from .util import inside, long_path, open_db_readonly, utc_now, write_json
 
 # Top-level folders a Kindle creates. Any other top-level name is counted,
 # not named: a user can create folders there.
@@ -156,9 +155,9 @@ def survey(acq_dir, out_path=None):
         ext = _extension(row["rel_path"])
         _count(by_area.setdefault(area, {}), ext)
         try:
-            with open(long_path(acq / "files" / row["rel_path"]), "rb") as fh:
+            with open(long_path(inside(acq / "files", row["rel_path"])), "rb") as fh:
                 head = fh.read(68)
-        except OSError:
+        except (OSError, ValueError):
             head = None
         _count(signatures.setdefault(ext, {}),
                "<unreadable>" if head is None else _signature(head))
@@ -170,11 +169,11 @@ def survey(acq_dir, out_path=None):
     for row in files:
         if row["rel_path"].lower() == "system/version.txt":
             try:
-                text = (acq / "files" / row["rel_path"]).read_bytes()[:200]
+                text = inside(acq / "files", row["rel_path"]).read_bytes()[:200]
                 text = text.decode("utf-8", "replace").strip()
                 profile["device"]["firmware"] = (
                     text if _FIRMWARE.match(text) else "<unexpected content>")
-            except OSError:
+            except (OSError, ValueError):
                 pass
 
     # --- parsed records ------------------------------------------------------
@@ -185,7 +184,7 @@ def survey(acq_dir, out_path=None):
         parse_acquisition(acq, Path(temp) / "parsed")
         parsed = Path(temp) / "parsed" / "kindle_parsed.db"
     try:
-        con = sqlite3.connect(str(parsed))
+        con = open_db_readonly(parsed)
         tables = {name: con.execute('SELECT COUNT(*) FROM "%s"' % name.replace('"', '""'))
                   .fetchone()[0]
                   for (name,) in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
@@ -199,7 +198,7 @@ def survey(acq_dir, out_path=None):
             entry["count"] += 1
             try:
                 shape = [_shape(v) for v in json.loads(values)]
-            except ValueError:
+            except (ValueError, RecursionError):
                 shape = ["<not decoded>"]
             # Long repeated runs say nothing new: keep the first few values.
             shape = shape[:12] + (["..."] if len(shape) > 12 else [])

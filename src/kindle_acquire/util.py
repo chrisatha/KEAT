@@ -5,7 +5,9 @@ import hashlib
 import json
 import os
 import platform
+import re
 import socket
+import sqlite3
 import sys
 import time
 from datetime import datetime, timezone
@@ -36,6 +38,53 @@ def long_path(path):
     if s.startswith("\\\\"):
         return "\\\\?\\UNC\\" + s[2:]
     return "\\\\?\\" + s
+
+
+def inside(root, rel):
+    """The path of `rel` under `root`, as a Path.
+
+    `rel` comes from a record (a manifest, a log) that may have been written
+    by someone else. A path that would leave `root` raises ValueError.
+    """
+    text = str(rel).replace("\\", "/")
+    parts = text.split("/")
+    if (not text or text.startswith("/") or os.path.isabs(text)
+            or os.path.splitdrive(text)[0]
+            or (os.name == "nt" and ":" in text)
+            or any(part in ("", ".", "..") for part in parts)):
+        raise ValueError("the record names a path outside its folder: %r" % (rel,))
+    return Path(root).joinpath(*parts)
+
+
+_FORMULA_LEAD = ("=", "+", "-", "@", "\t", "\r")
+_PLAIN_SIGNED = re.compile(r"^[+-][0-9][0-9.,:]*$")
+
+
+def csv_safe(value):
+    """A CSV cell that a spreadsheet will not run as a formula.
+
+    Text from the device that starts with =, +, -, @, tab or carriage return
+    gets a leading apostrophe. A signed number or offset such as -05:00 is
+    left as it is. Other values are returned unchanged.
+    """
+    if (isinstance(value, str) and value.startswith(_FORMULA_LEAD)
+            and not _PLAIN_SIGNED.match(value)):
+        return "'" + value
+    return value
+
+
+def open_db_readonly(path):
+    """Open a SQLite file read-only. Its schema is not trusted."""
+    con = sqlite3.connect(Path(path).resolve().as_uri() + "?mode=ro", uri=True)
+    harden_db(con)
+    return con
+
+
+def harden_db(con):
+    """Settings for a database that the tool did not write itself."""
+    # Unknown pragmas are ignored by older SQLite versions.
+    con.execute("PRAGMA trusted_schema=OFF")
+    con.execute("PRAGMA cell_size_check=ON")
 
 
 def hash_file(path, algorithms=("sha256",)):

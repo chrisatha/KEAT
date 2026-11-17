@@ -16,7 +16,8 @@ from pathlib import Path
 from . import __version__, analysis, device_records
 from .parsers import krds
 from .parsers.clippings import parse_clippings
-from .util import hash_file, long_path, utc_now, write_json
+from .util import (csv_safe, harden_db, hash_file, inside, long_path, utc_now,
+                   write_json)
 
 _ASIN = re.compile(r"_(B[0-9A-Z]{9})(_sample)?$")
 _CDE_KEY = re.compile(r"-cdeKey_([0-9A-Fa-f]{32})$")
@@ -78,11 +79,14 @@ def _ident(name):
 def _csv_cell(value):
     """A CSV cannot hold a NUL character. Show it as the text \\x00.
 
-    The SQLite file keeps the value unchanged.
+    Text that a spreadsheet would read as a formula gets a leading
+    apostrophe. The SQLite file keeps the value unchanged.
     """
     if isinstance(value, str) and "\x00" in value:
-        return value.replace("\x00", "\\x00")
-    return value
+        value = value.replace("\x00", "\\x00")
+    # Device text must not run as a formula when the file is opened in a
+    # spreadsheet.
+    return csv_safe(value)
 
 
 def _cell(value):
@@ -104,7 +108,7 @@ def _open_working_copy(path, tmp_root):
             shutil.copy2(src, os.path.join(work, os.path.basename(str(path)) + suffix))
     con = sqlite3.connect(os.path.join(work, os.path.basename(str(path))))
     # The schema comes from the device: do not let it run functions.
-    con.execute("PRAGMA trusted_schema=OFF")
+    harden_db(con)
     return con
 
 
@@ -178,10 +182,21 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
 
     with open(manifest_path, newline="", encoding="utf-8") as fh:
         manifest = [r for r in csv.DictReader(fh)]
-    files = [r for r in manifest if r["type"] == "file" and r["status"] == "ok"]
+    # A manifest may come from someone else. A row that names a path outside
+    # the acquisition folder is listed as an error and not read.
+    files = []
+    for r in manifest:
+        if r["type"] != "file" or r["status"] != "ok":
+            continue
+        try:
+            inside(files_root, r["rel_path"])
+        except ValueError as exc:
+            errors.append({"file": r["rel_path"], "parser": "manifest", "error": str(exc)})
+            continue
+        files.append(r)
 
     def read(rel, limit=None):
-        with open(long_path(files_root / rel), "rb") as fh:
+        with open(long_path(inside(files_root, rel)), "rb") as fh:
             return fh.read() if limit is None else fh.read(limit)
 
     # --- device facts -----------------------------------------------------
@@ -214,7 +229,13 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
             deleted_rows = list(reader)
         for r in deleted_rows:
             if r["recovered_file"]:
-                candidates.append((r["recovered_file"], acq / r["recovered_file"],
+                try:
+                    full = inside(acq, r["recovered_file"])
+                except ValueError as exc:
+                    errors.append({"file": r["recovered_file"], "parser": "deleted entries",
+                                   "error": str(exc)})
+                    continue
+                candidates.append((r["recovered_file"], full,
                                    r["rel_path"], r, "deleted, read back"))
     for rel, full, original, row, state in candidates:
         try:

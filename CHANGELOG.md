@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.4.1
+
+### Security
+
+- `parse`, `verify`, `survey` and `extract` refuse a path in a manifest,
+  a deleted-entry list or an image log that points outside the
+  acquisition folder. Before, a folder received from someone else could
+  make `parse` read files on the examination computer into its output.
+- Text in the parsed CSV files and in the `compare` difference list that
+  a spreadsheet would run as a formula gets a leading apostrophe. The
+  SQLite file keeps the text unchanged.
+- The examiner report carries a content security policy: no scripts, no
+  outside requests.
+- The window shows paths, device names and error messages as plain text.
+  Before, markup in such text could make the window load an image from a
+  network path.
+- A JSON record nested deeper than Python allows no longer stops a parse.
+- `extract` stops reading deleted files back once they hold as much data
+  as the volume can store. Many deleted entries can name the same free
+  space.
+- `logical` does not follow a junction or mount point in the source.
+- Databases are opened with an untrusted schema, and the parsed database
+  is opened read-only by `survey`.
+
 ## 0.4.0
 
 ### Added

@@ -370,6 +370,12 @@ An extraction or a logical copy:
         report.html.sha256
 ```
 
+Names and text on a device are written by its user. In the files under
+`csv/`, a value that a spreadsheet would run as a formula starts with an
+added apostrophe. `kindle_parsed.db` holds the value as the device wrote
+it. `manifest.csv` and `deleted_entries.csv` hold names as stored, since
+`verify` and `parse` read them back. Open those two as text.
+
 ## Write protection
 
 A Kindle in mass-storage mode is a FAT32 disk. Windows writes to a FAT32

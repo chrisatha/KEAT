@@ -82,7 +82,7 @@ def _display_names(text):
     """Titles and credits in freetime.db are JSON lists of display names."""
     try:
         items = json.loads(text)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, RecursionError):
         return ""
     names = []
     for item in items if isinstance(items, list) else []:
@@ -548,7 +548,9 @@ def build_summary(log, facts, manifest, documents, annotations, positions, clipp
     if library:
         try:
             counts = json.loads(library[-1]["record"])
-        except ValueError:
+        except (TypeError, ValueError, RecursionError):
+            counts = {}
+        if not isinstance(counts, dict):
             counts = {}
         for key in ("all", "books", "books_downloaded", "audiobooks", "audiobooks_downloaded",
                     "documents", "documents_downloaded"):

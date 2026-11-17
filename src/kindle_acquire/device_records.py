@@ -43,7 +43,7 @@ def _utc(value):
 def _json(text):
     try:
         value = json.loads(text)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, RecursionError):
         return {}
     return value if isinstance(value, dict) else {}
 

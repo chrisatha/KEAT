@@ -35,6 +35,20 @@ def _attributes(st):
     return "".join(names)
 
 
+def _is_junction(entry):
+    """A folder that points somewhere else (a junction or a mount point).
+
+    Following one would copy files from outside the source.
+    """
+    try:
+        st = entry.stat(follow_symlinks=False)
+    except OSError:
+        return False
+    reparse = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    return bool(stat.S_ISDIR(st.st_mode)
+                and getattr(st, "st_file_attributes", 0) & reparse)
+
+
 def _row_maker(stored_offset_ns):
     """Return the function that builds manifest rows for one run.
 
@@ -179,6 +193,10 @@ def acquire_logical(source, out_dir, case=None, device=None, quiet=False):
                         counts["other"] += 1
                         emit(_row(rel_posix, "link", status="skipped",
                                   detail="link, not followed"))
+                    elif _is_junction(entry):
+                        counts["other"] += 1
+                        emit(_row(rel_posix, "link", status="skipped",
+                                  detail="junction or mount point, not followed"))
                     elif entry.is_dir(follow_symlinks=False):
                         st = entry.stat(follow_symlinks=False)
                         os.makedirs(dst, exist_ok=True)

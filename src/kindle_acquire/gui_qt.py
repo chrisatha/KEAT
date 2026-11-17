@@ -143,6 +143,9 @@ class RowsModel(QtCore.QAbstractTableModel):
 
 def _label(text, name, wrap=False):
     label = QtWidgets.QLabel(text)
+    # Plain text: a label must not render markup found in a path, a device
+    # name or an error message.
+    label.setTextFormat(Qt.TextFormat.PlainText)
     label.setObjectName(name)
     label.setWordWrap(wrap)
     return label
@@ -549,11 +552,20 @@ class Window(QtWidgets.QMainWindow):
 
     def _ask(self, text):
         buttons = QtWidgets.QMessageBox.StandardButton
-        return QtWidgets.QMessageBox.question(
-            self, "KEAT", text, buttons.Yes | buttons.No, buttons.No) == buttons.Yes
+        return self._box(QtWidgets.QMessageBox.Icon.Question, text,
+                         buttons.Yes | buttons.No, buttons.No) == buttons.Yes
 
     def _warn(self, text):
-        QtWidgets.QMessageBox.warning(self, "KEAT", text)
+        self._box(QtWidgets.QMessageBox.Icon.Warning, text,
+                  QtWidgets.QMessageBox.StandardButton.Ok)
+
+    def _box(self, icon, text, buttons, default=None):
+        """A message box that shows its text as plain text, never as markup."""
+        box = QtWidgets.QMessageBox(icon, "KEAT", text, buttons, self)
+        box.setTextFormat(Qt.TextFormat.PlainText)
+        if default is not None:
+            box.setDefaultButton(default)
+        return box.exec()
 
     def _pick_folder_into(self, edit, title):
         chosen = QtWidgets.QFileDialog.getExistingDirectory(self, title, edit.text().strip())
@@ -832,7 +844,7 @@ class Window(QtWidgets.QMainWindow):
             self._warn("No kindle_parsed.db in\n%s" % folder)
             return
         try:
-            con = sqlite3.connect(Path(path).as_uri() + "?mode=ro", uri=True)
+            con = util.open_db_readonly(path)
             tables = [(name, con.execute('SELECT COUNT(*) FROM "%s"' % name.replace('"', '""'))
                        .fetchone()[0])
                       for (name,) in con.execute(
@@ -860,7 +872,7 @@ class Window(QtWidgets.QMainWindow):
         if not name or not self.results_db:
             return
         try:
-            con = sqlite3.connect(Path(self.results_db).as_uri() + "?mode=ro", uri=True)
+            con = util.open_db_readonly(self.results_db)
             cur = con.execute('SELECT * FROM "%s"' % name.replace('"', '""'))
             columns = [d[0] for d in cur.description]
             rows = cur.fetchall()
