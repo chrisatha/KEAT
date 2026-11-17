@@ -82,6 +82,11 @@ Look for:
 
 ## 6. Check the records against the device
 
+Open `parsed/report.html`. Check the model line against the label on the
+device: the model comes from a list of serial number codes that covers
+four models. Check the device clock offset against the time zone set on
+the device. Note the device clock and a reference clock side by side.
+
 Pick three annotations and three clippings on the device screen and find
 them in the parsed tables. Check the text, the kind and the time. Add a
 typed note if the device has none, acquire again, and confirm the note

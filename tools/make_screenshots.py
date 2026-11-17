@@ -4,10 +4,13 @@
 
 Builds the invented Kindle from tests/synthetic_kindle.py (made-up titles,
 notes and serial number), runs Extract and Parse on it in the Qt window, and
-saves one picture per screen to docs/screenshots. No device is needed and
+saves one picture per screen to docs/screenshots, with one of the examiner
+report. No device is needed and
 no real data is shown. Temporary paths are replaced before each picture.
 """
 
+import os
+import subprocess
 import sys
 import tempfile
 import time
@@ -23,6 +26,23 @@ from synthetic_kindle import build_image  # noqa: E402
 
 SHOTS = REPO / "docs" / "screenshots"
 SHOWN_ROOT = r"C:\Cases\2026-0114"
+
+
+def report_shot(report, target):
+    """A picture of the examiner report, taken with Edge when it is installed."""
+    for root in (os.environ.get("ProgramFiles(x86)"), os.environ.get("ProgramFiles")):
+        edge = Path(root or "") / "Microsoft" / "Edge" / "Application" / "msedge.exe"
+        if edge.is_file():
+            break
+    else:
+        print("Edge not found: report.png not rebuilt")
+        return
+    profile = tempfile.mkdtemp(prefix="keat_edge_")
+    subprocess.run([str(edge), "--headless=new", "--disable-gpu", "--hide-scrollbars",
+                    "--user-data-dir=%s" % profile, "--window-size=1240,1250",
+                    "--screenshot=%s" % target, report.resolve().as_uri()],
+                   check=False, timeout=120, stdout=subprocess.DEVNULL,
+                   stderr=subprocess.DEVNULL)
 
 
 def main():
@@ -99,7 +119,13 @@ def main():
             window.view.selectRow(row)
             break
     shot("results.png")
+    window.table_pick.setCurrentIndex(window.table_pick.findData("timeline"))
+    pump()
+    window.filter_box.setText("device")
+    pump()
+    shot("timeline.png")
     window.close()
+    report_shot(real_out / "parsed" / "report.html", SHOTS / "report.png")
     print("saved to %s" % SHOTS)
     for path in sorted(SHOTS.glob("*.png")):
         print("  %s  %d bytes" % (path.name, path.stat().st_size))

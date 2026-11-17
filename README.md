@@ -15,7 +15,8 @@ Amazon Kindle e-readers.
 KEAT images a Kindle's storage, extracts its files and deleted entries
 from the image, and parses the records an examiner usually needs:
 highlights, notes, bookmarks, reading positions, dictionary lookups,
-loaded documents and reading statistics.
+loaded documents and reading statistics. It then builds a timeline, a
+table of documents, a device summary and an examiner report from them.
 
 It copies data as stored. It does not remove, bypass or decrypt DRM.
 Protected books are copied and labelled as protected. They are not opened.
@@ -51,6 +52,8 @@ them from a synthetic image.*
 | **Copy** | Hashed copy of every file from a mounted volume, for when imaging is not possible |
 | **Verify** | Re-hashes an acquisition against its own records and reports changed, missing and added files |
 | **Parse** | Decodes the device's records into one SQLite file and one CSV per table. Optional matching against a set of known hashes |
+| **Analyse** | Part of Parse. Builds a timeline of every dated record, one row per document, a device summary, activity by day, the device clock offset, and cross-checks between the device's own sources |
+| **Report** | Part of Parse. Writes `report.html`, one self-contained page for the examiner's file |
 | **Compare** | Compares the records of two acquisitions: files added, removed or changed, and times that differ |
 | **Survey** | Writes the structure of a device with none of its content, for reporting a model the tool does not know |
 
@@ -135,6 +138,16 @@ read back from deleted files.
 
 ![Results](docs/screenshots/results.png)
 
+The `timeline` table puts every dated record in one list. Each row names
+its time basis and the record it came from.
+
+![Timeline](docs/screenshots/timeline.png)
+
+**Open Report** opens the examiner report of the loaded results in the
+default browser.
+
+![Examiner report](docs/screenshots/report.png)
+
 The Qt window runs on PySide6 or PyQt6. Without either, or with
 `kindle-acquire gui --tk`, a Tkinter window with the same steps opens.
 
@@ -158,6 +171,7 @@ kindle-acquire extract <image folder or image file> --out <folder>
 kindle-acquire logical --out <folder>
 kindle-acquire verify  <acquisition folder>
 kindle-acquire parse   <logical or extracted folder> [--known <folder or hash list>]
+kindle-acquire report  <parsed or acquisition folder> [--out <file>]
 kindle-acquire compare <acquisition folder> <acquisition folder> [--out <differences.csv>]
 kindle-acquire survey  <logical or extracted folder>
 kindle-acquire gui     [--tk]
@@ -241,11 +255,36 @@ and writes `parsed/kindle_parsed.db` plus one CSV per table:
 | `known_matches` | Files whose hash is in the reference set given with `--known` |
 | `parse_errors` | Every file a parser could not read, with the reason |
 
+Six analysis tables are built from the rows above. They read nothing
+else, and each row names the record it came from:
+
+| Table | Content |
+| --- | --- |
+| `device_summary` | Serial number, model indicated by the serial number, firmware, USB ID, volume, case fields, hashes, counts of content and records, earliest and latest times, device clock offsets. Each row names its source |
+| `documents` | One row per document file, deleted document entry, or sidecar folder with no document file. Title, kind (store book, store sample, personal document, audiobook), state, container, counts of highlights, notes, bookmarks, clippings and lookups, first and last activity, hashes |
+| `timeline` | Every dated record in time order: annotations, reading positions, clippings, lookups, reading statistics, queued activity records, and created and modified times of live and deleted files. `time_basis` names the clock each time comes from |
+| `activity_by_day` | Counts of timeline events per date, by source |
+| `clock_offsets` | Each clipping paired with the sidecar annotation made in the same second. The difference is the device's UTC offset at that moment |
+| `observations` | Cross-checks: clippings with no sidecar annotation, clippings found only in a deleted sidecar, annotations with no clipping, sidecars with no document, deleted documents, the same content at two paths, known hash matches, and device times before November 2007 or after the acquisition |
+
+Parse also writes `parsed/report.html`, the examiner report: summary
+counts, documents, annotations by document with the clipping text beside
+each, clippings, cross-checks, activity by day, the timeline without file
+system events, device and acquisition details, and the limits that apply.
+It is one file with no scripts and no outside links. Text from the device
+is escaped. Its SHA-256 is in `report.html.sha256`.
+
 `--known` takes a folder of reference files, or a text or CSV file with
 one MD5 or SHA-256 per line. Every file in the acquisition and every
 recovered deleted file is compared. A match means the content is
 identical. No match does not show the document was never on the device:
 a converted or edited copy has a different hash.
+
+### report
+
+Writes the examiner report again from an existing `kindle_parsed.db`, for
+example to another file with `--out`. It needs the analysis tables. Parse
+an acquisition that was parsed by version 0.2.0 or earlier again first.
 
 ### compare
 
@@ -303,6 +342,8 @@ An extraction or a logical copy:
         kindle_parsed.db           every parsed table
         csv/                       the same tables, one CSV each
         parse_log.json
+        report.html                the examiner report
+        report.html.sha256
 ```
 
 ## Write protection
@@ -331,6 +372,11 @@ Three kinds of time appear in the output. They are not interchangeable.
 - `added_device_local` in `clippings`: the clock time the device printed,
   in the device's time zone setting.
 
+The `timeline` table holds all of them in one list and names the basis of
+each row. Rows in different bases are in true order only after the
+device's UTC offset is applied. `clock_offsets` gives that offset for each
+moment where a clipping and a sidecar annotation record the same event.
+
 [docs/METHOD.md](docs/METHOD.md) records how each of these was
 established, with the test figures.
 
@@ -353,6 +399,10 @@ established, with the test figures.
   data, not yet against a device. The functions behind them have.
 - KEAT has not yet been tested with the Kindle behind a hardware write
   blocker. The device tests were made on a direct USB connection.
+- The model name in `device_summary` comes from a community list of
+  serial number codes. It covers four models and is an indication only.
+- Titles come from the device's databases where an ASIN matches, else from
+  the file name. A clipping is linked to a document by comparing titles.
 - Note text in sidecar files is decoded by position. It is covered by a
   synthetic test and has not been checked against a device that holds notes.
 
@@ -360,7 +410,7 @@ established, with the test figures.
 
 | Model | Serial prefix | Firmware | USB ID | Mode | Result |
 | --- | --- | --- | --- | --- | --- |
-| Kindle (model to confirm) | G001PX | 5.19.2 | 1949:0324 | mass storage | logical, image, extract, verify, parse |
+| Kindle (serial code indicates Paperwhite 11th generation, to confirm on the device) | G001PX | 5.19.2 | 1949:0324 | mass storage | logical, image, extract, verify, parse |
 
 On that device the image was read twice with matching hashes, and the
 extraction from the image matched a logical copy for all 2,541 files.

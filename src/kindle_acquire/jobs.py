@@ -156,10 +156,23 @@ def run_parse(acquisition, known, say):
     from .report import parse_acquisition
     summary = parse_acquisition(acquisition, known=known or None)
     parsed = summary.pop("output")
+    report = summary.pop("report")
     width = max(len(k) for k in summary)
     for key, value in summary.items():
         say("  %-*s %s" % (width, key, value))
+    say("Examiner report: %s" % report)
     return parsed
+
+
+def open_report(folder):
+    """Open the examiner report of a parsed acquisition in the default browser."""
+    import webbrowser
+    from .examiner import find_parsed
+    path = find_parsed(folder) / "report.html"
+    if not path.is_file():
+        raise ValueError("no report.html in %s. Parse the acquisition again." % path.parent)
+    webbrowser.open(path.resolve().as_uri())
+    return str(path)
 
 
 def run_compare(first, second, say):

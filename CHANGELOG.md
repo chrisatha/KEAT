@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0
+
+### Added
+
+- Analysis tables, built by `parse` from the parsed rows: `device_summary`,
+  `documents`, `timeline`, `activity_by_day`, `clock_offsets` and
+  `observations`.
+- The examiner report, `parsed/report.html`: one self-contained HTML page
+  with its SHA-256 beside it. `report` writes it again from an existing
+  parse.
+- The Qt results viewer has an Open Report button and opens on the device
+  summary.
+- A model name indicated by the serial number, for four models.
+- Screenshots of the timeline and the report, from synthetic data.
+
+### Changed
+
+- `parse` returns and prints the path of the report.
+
 ## 0.2.0
 
 ### Added

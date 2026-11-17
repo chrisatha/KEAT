@@ -13,7 +13,7 @@ import sqlite3
 import tempfile
 from pathlib import Path
 
-from . import __version__
+from . import __version__, analysis
 from .parsers import krds
 from .parsers.clippings import parse_clippings
 from .util import hash_file, long_path, utc_now, write_json
@@ -186,6 +186,7 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
 
     # --- device facts -----------------------------------------------------
     facts = []
+    log = {}
     log_path = acq / "acquisition_log.json"
     if log_path.is_file():
         log = json.loads(log_path.read_text(encoding="utf-8"))
@@ -389,6 +390,11 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
             row["known_match"] = (known_hashes.get(row["sha256"])
                                   or known_hashes.get(row["md5"]) or "")
         out.table("deleted_entries", deleted_columns + ["known_match"], deleted_rows)
+    # --- analysis tables, derived from the rows above ---------------------------
+    for name, columns, rows in analysis.build(
+            log, facts, manifest, files, content, annotations, positions, clippings,
+            lookups, deleted_rows, sidecar_files, exported, errors, __version__):
+        out.table(name, columns, rows)
     out.table("parse_errors", ["file", "parser", "error"], errors)
     out.close()
 
@@ -404,6 +410,13 @@ def parse_acquisition(acq_dir, out_dir=None, known=None):
             "*_utc": "decoded from millisecond epoch values written by the device",
             "*_stored": "FAT directory time as stored, no time zone",
             "added_device_local": "clock time printed by the device, no time zone",
+            "timeline.time": "in the basis named in time_basis. Events in different "
+                             "bases are not in true order without the device clock "
+                             "offset (clock_offsets table)",
+            "activity_by_day.day": "the date part of timeline.time, each event in "
+                                   "its own basis",
         },
     })
+    from .examiner import write_report
+    summary["report"] = write_report(out.out)
     return summary

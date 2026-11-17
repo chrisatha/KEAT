@@ -178,6 +178,12 @@ def cmd_parse(args):
     return 0
 
 
+def cmd_report(args):
+    from .examiner import describe, write_report
+    print(describe(write_report(args.acquisition, args.out)))
+    return 0
+
+
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="kindle-acquire",
@@ -227,12 +233,19 @@ def build_parser():
     p.add_argument("acquisition", help="acquisition folder")
     p.set_defaults(func=cmd_verify)
 
-    p = sub.add_parser("parse", help="parse a logical acquisition into SQLite and CSV")
+    p = sub.add_parser("parse", help="parse an acquisition into SQLite, CSV and an examiner "
+                                     "report")
     p.add_argument("acquisition", help="logical acquisition folder")
     p.add_argument("--out", help="output folder (default: <acquisition>/parsed)")
     p.add_argument("--known", help="reference files to look for: a folder of files, "
                                    "or a text/CSV file of MD5 or SHA-256 values")
     p.set_defaults(func=cmd_parse)
+
+    p = sub.add_parser("report", help="write the examiner report (HTML) of a parsed "
+                                      "acquisition again")
+    p.add_argument("acquisition", help="parsed folder, or the acquisition folder above it")
+    p.add_argument("--out", help="output file (default: <parsed>/report.html)")
+    p.set_defaults(func=cmd_report)
 
     p = sub.add_parser("compare", help="compare the records of two acquisitions")
     p.add_argument("a", help="first acquisition folder")

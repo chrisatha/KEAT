@@ -378,6 +378,130 @@
   }
  ],
  "tables": {
+  "activity_by_day": {
+   "columns": [
+    "day",
+    "total",
+    "annotations_and_positions",
+    "clippings",
+    "lookups",
+    "files_created",
+    "files_modified",
+    "deleted_entry_times",
+    "reading_statistics",
+    "queued_activity_records"
+   ],
+   "rows": [
+    [
+     "2026-02-21",
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-02-22",
+     2,
+     2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-03",
+     2,
+     0,
+     2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-04",
+     4,
+     2,
+     0,
+     2,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-05",
+     2,
+     2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-07",
+     7,
+     3,
+     2,
+     2,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-16",
+     3,
+     2,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-03-19",
+     3,
+     2,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "2026-11-15",
+     28,
+     0,
+     0,
+     0,
+     11,
+     11,
+     6,
+     0,
+     0
+    ]
+   ]
+  },
   "annotations": {
    "columns": [
     "book_key",
@@ -614,6 +738,94 @@
     ]
    ]
   },
+  "clock_offsets": {
+   "columns": [
+    "clipping_entry",
+    "title",
+    "kind",
+    "clipping_local",
+    "annotation_utc",
+    "offset_minutes",
+    "offset",
+    "matched_on",
+    "file_state",
+    "sidecar_file"
+   ],
+   "rows": [
+    [
+     1,
+     "Tidewater Engineering Handbook",
+     "highlight",
+     "2026-03-03T21:14:22",
+     "2026-03-04T02:14:22.000+00:00",
+     -300,
+     "UTC-05:00",
+     "title, kind and time",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     2,
+     "Tidewater Engineering Handbook",
+     "note",
+     "2026-03-03T21:15:40",
+     "2026-03-04T02:15:40.000+00:00",
+     -300,
+     "UTC-05:00",
+     "title, kind and time",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     3,
+     "A Short History of Lighthouses",
+     "bookmark",
+     "2026-03-07T07:02:11",
+     "2026-03-07T12:02:11.000+00:00",
+     -300,
+     "UTC-05:00",
+     "title, kind and time",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr"
+    ],
+    [
+     4,
+     "A Short History of Lighthouses",
+     "highlight",
+     "2026-03-07T07:09:48",
+     "2026-03-07T12:09:48.000+00:00",
+     -300,
+     "UTC-05:00",
+     "title, kind and time",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr"
+    ],
+    [
+     5,
+     "Notes on Contract Drafting",
+     "highlight",
+     "2026-03-16T12:31:05",
+     "2026-03-16T16:31:05.000+00:00",
+     -240,
+     "UTC-04:00",
+     "title, kind and time",
+     "allocated",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.sdr/Notes on Contract Drafting_B0SYNTH003.yjr"
+    ],
+    [
+     6,
+     "Q3 operations review",
+     "note",
+     "2026-03-19T16:47:30",
+     "2026-03-19T20:47:30.000+00:00",
+     -240,
+     "UTC-04:00",
+     "title, kind and time",
+     "allocated",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.sdr/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pds"
+    ]
+   ]
+  },
   "content_files": {
    "columns": [
     "rel_path",
@@ -836,6 +1048,517 @@
     ]
    ]
   },
+  "device_summary": {
+   "columns": [
+    "section",
+    "item",
+    "value",
+    "source"
+   ],
+   "rows": [
+    [
+     "Device",
+     "firmware",
+     "Kindle 5.17.1 (0000000 000)",
+     "system/version.txt"
+    ],
+    [
+     "Device",
+     "volume label",
+     "KINDLE",
+     "acquisition_log.json"
+    ],
+    [
+     "Device",
+     "volume serial",
+     "1234-ABCD",
+     "acquisition_log.json"
+    ],
+    [
+     "Device",
+     "cluster size in bytes",
+     1024,
+     "acquisition_log.json"
+    ],
+    [
+     "Device",
+     "clusters",
+     400,
+     "acquisition_log.json"
+    ],
+    [
+     "Device",
+     "free clusters",
+     351,
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "kind",
+     "logical FAT32 reader on a raw image",
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "started (UTC)",
+     "<varies>",
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "finished (UTC)",
+     "<varies>",
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "tool version",
+     "<varies>",
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "parsed with tool version",
+     "<varies>",
+     "parse_log.json"
+    ],
+    [
+     "Acquisition",
+     "manifest SHA-256",
+     "<varies>",
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "source image SHA-256",
+     "<varies>",
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "files copied and verified",
+     11,
+     "acquisition_log.json"
+    ],
+    [
+     "Acquisition",
+     "files with errors",
+     0,
+     "acquisition_log.json"
+    ],
+    [
+     "Content",
+     "files",
+     11,
+     "manifest.csv"
+    ],
+    [
+     "Content",
+     "folders",
+     9,
+     "manifest.csv"
+    ],
+    [
+     "Content",
+     "document files present",
+     4,
+     "documents"
+    ],
+    [
+     "Content",
+     "document files: personal document",
+     1,
+     "documents"
+    ],
+    [
+     "Content",
+     "document files: store book",
+     3,
+     "documents"
+    ],
+    [
+     "Content",
+     "document files in a DRM-protected container",
+     3,
+     "documents"
+    ],
+    [
+     "Content",
+     "documents with annotations",
+     5,
+     "documents"
+    ],
+    [
+     "Records",
+     "highlights in live sidecars",
+     4,
+     "annotations"
+    ],
+    [
+     "Records",
+     "notes in live sidecars",
+     2,
+     "annotations"
+    ],
+    [
+     "Records",
+     "bookmarks in live sidecars",
+     1,
+     "annotations"
+    ],
+    [
+     "Records",
+     "annotations in deleted sidecars",
+     2,
+     "annotations"
+    ],
+    [
+     "Records",
+     "annotations with note text",
+     2,
+     "annotations"
+    ],
+    [
+     "Records",
+     "clippings",
+     6,
+     "clippings"
+    ],
+    [
+     "Records",
+     "reading positions with a time",
+     5,
+     "reading_positions"
+    ],
+    [
+     "Records",
+     "word lookups",
+     4,
+     "vocabulary_lookups"
+    ],
+    [
+     "Records",
+     "timeline events",
+     52,
+     "timeline"
+    ],
+    [
+     "Records",
+     "parse errors",
+     0,
+     "parse_errors"
+    ],
+    [
+     "Deleted",
+     "deleted entries listed",
+     3,
+     "deleted_entries"
+    ],
+    [
+     "Deleted",
+     "deleted files read back",
+     2,
+     "deleted_entries"
+    ],
+    [
+     "Deleted",
+     "deleted document entries",
+     1,
+     "documents"
+    ],
+    [
+     "Times",
+     "earliest, device clock (UTC)",
+     "2026-02-21T23:40:02.000+00:00",
+     "timeline"
+    ],
+    [
+     "Times",
+     "latest, device clock (UTC)",
+     "2026-03-19T21:05:00.000+00:00",
+     "timeline"
+    ],
+    [
+     "Times",
+     "earliest, clippings (device local)",
+     "2026-03-03T21:14:22",
+     "timeline"
+    ],
+    [
+     "Times",
+     "latest, clippings (device local)",
+     "2026-03-19T16:47:30",
+     "timeline"
+    ],
+    [
+     "Times",
+     "earliest, file system (as stored)",
+     "2026-11-15T04:13:20",
+     "timeline"
+    ],
+    [
+     "Times",
+     "latest, file system (as stored)",
+     "2026-11-15T04:13:21",
+     "timeline"
+    ],
+    [
+     "Times",
+     "device clock offset UTC-04:00",
+     "2 matched clipping(s), 2026-03-16 to 2026-03-19",
+     "clock_offsets"
+    ],
+    [
+     "Times",
+     "device clock offset UTC-05:00",
+     "4 matched clipping(s), 2026-03-03 to 2026-03-07",
+     "clock_offsets"
+    ]
+   ]
+  },
+  "documents": {
+   "columns": [
+    "title",
+    "authors",
+    "kind",
+    "state",
+    "container",
+    "protected",
+    "highlights",
+    "notes",
+    "bookmarks",
+    "other_annotations",
+    "annotations_in_deleted_sidecars",
+    "clippings",
+    "lookups",
+    "first_activity_utc",
+    "last_activity_utc",
+    "last_position",
+    "last_position_utc",
+    "created_stored",
+    "modified_stored",
+    "size",
+    "sha256",
+    "asin",
+    "cde_key",
+    "known_match",
+    "title_source",
+    "deleted_entry_index",
+    "rel_path",
+    "book_key"
+   ],
+   "rows": [
+    [
+     "A Short History of Lighthouses",
+     "Brandt, Elise",
+     "store book",
+     "file present",
+     "KFX (DRM-protected)",
+     "yes",
+     1,
+     0,
+     1,
+     0,
+     0,
+     2,
+     2,
+     "2026-03-07T12:01:00.000+00:00",
+     "2026-03-07T12:40:00.000+00:00",
+     "AY8AAAA:27391",
+     "2026-03-07T12:40:00.000+00:00",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "608",
+     "a3a63135bc1e7b023805b54203e045be4ffc21355a627fa3dc598cfd20cb669c",
+     "B0SYNTH002",
+     "",
+     "",
+     "system/vocabulary/vocab.db",
+     "",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.kfx",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002"
+    ],
+    [
+     "Draft supplier terms",
+     "",
+     "personal document",
+     "deleted entry, read back",
+     "",
+     "",
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     "",
+     "",
+     "",
+     "",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "2109",
+     "6332c6317a15dbc8bf989f3be847025d0ebe42ffe98bcda69889df409dab2b57",
+     "",
+     "11223344556677889900AABBCCDDEEFF",
+     "",
+     "file name",
+     "1",
+     "documents/Downloads/Items01/Draft_supplier_terms-cdeKey_11223344556677889900AABBCCDDEEFF.pdf",
+     "documents/Downloads/Items01/Draft_supplier_terms-cdeKey_11223344556677889900AABBCCDDEEFF"
+    ],
+    [
+     "Harbour Pilot Manual",
+     "",
+     "store book",
+     "deleted sidecar only",
+     "",
+     "",
+     0,
+     0,
+     0,
+     0,
+     2,
+     0,
+     0,
+     "2026-02-21T23:40:02.000+00:00",
+     "2026-02-22T00:06:00.000+00:00",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "B0SYNTH004",
+     "",
+     "",
+     "file name",
+     "",
+     "",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004"
+    ],
+    [
+     "Notes on Contract Drafting",
+     "",
+     "store book",
+     "file present",
+     "KFX (DRM-protected)",
+     "yes",
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     "2026-03-16T16:31:05.000+00:00",
+     "2026-03-16T16:50:00.000+00:00",
+     "AX2AAAA:2010",
+     "2026-03-16T16:50:00.000+00:00",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "608",
+     "a3a63135bc1e7b023805b54203e045be4ffc21355a627fa3dc598cfd20cb669c",
+     "B0SYNTH003",
+     "",
+     "",
+     "file name",
+     "",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.kfx",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003"
+    ],
+    [
+     "Q3 operations review",
+     "",
+     "personal document",
+     "file present",
+     "PDF",
+     "",
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     "2026-03-19T20:47:30.000+00:00",
+     "2026-03-19T21:05:00.000+00:00",
+     "6 0 0 0",
+     "2026-03-19T21:05:00.000+00:00",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "2409",
+     "f6eb9d2e1aed0c671d62707c59c1d776fa2dd6863e7301c854597cd94e47a229",
+     "",
+     "0A1B2C3D4E5F60718293A4B5C6D7E8F9",
+     "",
+     "file name",
+     "",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pdf",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9"
+    ],
+    [
+     "Tidewater Engineering Handbook",
+     "Okafor, Dana",
+     "store book",
+     "file present",
+     "KFX (DRM-protected)",
+     "yes",
+     2,
+     1,
+     0,
+     0,
+     0,
+     2,
+     2,
+     "2026-03-04T02:13:00.000+00:00",
+     "2026-03-05T01:30:00.000+00:00",
+     "AZ0CAAA:14466",
+     "2026-03-05T01:30:00.000+00:00",
+     "2026-11-15T04:13:21",
+     "2026-11-15T04:13:20",
+     "608",
+     "a3a63135bc1e7b023805b54203e045be4ffc21355a627fa3dc598cfd20cb669c",
+     "B0SYNTH001",
+     "",
+     "",
+     "system/vocabulary/vocab.db",
+     "",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.kfx",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001"
+    ]
+   ]
+  },
+  "observations": {
+   "columns": [
+    "check",
+    "item",
+    "detail"
+   ],
+   "rows": [
+    [
+     "sidecar annotation with no clipping made in the same second",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001: highlight, 2026-03-05T01:02:09.000+00:00",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     "deleted document entry",
+     "documents/Downloads/Items01/Draft_supplier_terms-cdeKey_11223344556677889900AABBCCDDEEFF.pdf",
+     "deleted entry, read back"
+    ],
+    [
+     "deleted sidecar, no content file",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     ""
+    ],
+    [
+     "same content at more than one path",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.kfx | documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.kfx | documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.kfx",
+     "a3a63135bc1e7b023805b54203e045be4ffc21355a627fa3dc598cfd20cb669c"
+    ]
+   ]
+  },
   "parse_errors": {
    "columns": [
     "file",
@@ -1038,6 +1761,593 @@
      "6a8e480b2f56a8b4b0f4fccf27c68eeb01eee83447bff0bfd7e7c92245009e52",
      "2026-11-15T04:13:20",
      2
+    ]
+   ]
+  },
+  "timeline": {
+   "columns": [
+    "time",
+    "time_basis",
+    "source",
+    "event",
+    "title",
+    "detail",
+    "file_state",
+    "book_key",
+    "record"
+   ],
+   "rows": [
+    [
+     "2026-02-21T23:40:02.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "highlight created",
+     "Harbour Pilot Manual",
+     "position AW1AAAA:5020",
+     "deleted, read back",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     "deleted/000003/Harbour Pilot Manual_B0SYNTH004.yjr"
+    ],
+    [
+     "2026-02-22T00:05:51.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "bookmark created",
+     "Harbour Pilot Manual",
+     "position AW1AAAA:6100",
+     "deleted, read back",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     "deleted/000003/Harbour Pilot Manual_B0SYNTH004.yjr"
+    ],
+    [
+     "2026-02-22T00:06:00.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "reading position saved (lpr)",
+     "Harbour Pilot Manual",
+     "position AW1AAAA:6100",
+     "deleted, read back",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     "deleted/000003/Harbour Pilot Manual_B0SYNTH004.yjr"
+    ],
+    [
+     "2026-03-03T21:14:22",
+     "device local time, no time zone",
+     "My Clippings.txt",
+     "highlight added to clippings",
+     "Tidewater Engineering Handbook",
+     "page 41 location 612-614 | A culvert sized for the ten-year storm will be overtopped within its service life.",
+     "allocated",
+     "",
+     "documents/My Clippings.txt entry 1"
+    ],
+    [
+     "2026-03-03T21:15:40",
+     "device local time, no time zone",
+     "My Clippings.txt",
+     "note added to clippings",
+     "Tidewater Engineering Handbook",
+     "page 41 location 614 | Compare with the figures in the Q3 review.",
+     "allocated",
+     "",
+     "documents/My Clippings.txt entry 2"
+    ],
+    [
+     "2026-03-04T02:13:00.000+00:00",
+     "UTC, from the device clock",
+     "vocabulary database",
+     "word looked up",
+     "Tidewater Engineering Handbook",
+     "culvert | A culvert sized for the ten-year storm will be overtopped.",
+     "allocated",
+     "",
+     "system/vocabulary/vocab.db"
+    ],
+    [
+     "2026-03-04T02:14:22.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "highlight created",
+     "Tidewater Engineering Handbook",
+     "position AZ0BAAA:9180",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     "2026-03-04T02:15:40.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "note created",
+     "Tidewater Engineering Handbook",
+     "position AZ0BAAA:9212 | note: Compare with the figures in the Q3 review.",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     "2026-03-04T02:20:00.000+00:00",
+     "UTC, from the device clock",
+     "vocabulary database",
+     "word looked up",
+     "Tidewater Engineering Handbook",
+     "revetment | The revetment failed at the toe.",
+     "allocated",
+     "",
+     "system/vocabulary/vocab.db"
+    ],
+    [
+     "2026-03-05T01:02:09.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "highlight created",
+     "Tidewater Engineering Handbook",
+     "position AZ0CAAA:14400",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     "2026-03-05T01:30:00.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "reading position saved (lpr)",
+     "Tidewater Engineering Handbook",
+     "position AZ0CAAA:14466",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr"
+    ],
+    [
+     "2026-03-07T07:02:11",
+     "device local time, no time zone",
+     "My Clippings.txt",
+     "bookmark added to clippings",
+     "A Short History of Lighthouses",
+     "page 118 location 1790",
+     "allocated",
+     "",
+     "documents/My Clippings.txt entry 3"
+    ],
+    [
+     "2026-03-07T07:09:48",
+     "device local time, no time zone",
+     "My Clippings.txt",
+     "highlight added to clippings",
+     "A Short History of Lighthouses",
+     "page 120 location 1822-1825 | The keeper's log was the only record of which ships had passed in the night.",
+     "allocated",
+     "",
+     "documents/My Clippings.txt entry 4"
+    ],
+    [
+     "2026-03-07T12:01:00.000+00:00",
+     "UTC, from the device clock",
+     "vocabulary database",
+     "word looked up",
+     "A Short History of Lighthouses",
+     "lamp | The lamp burned colza oil until 1860.",
+     "allocated",
+     "",
+     "system/vocabulary/vocab.db"
+    ],
+    [
+     "2026-03-07T12:02:11.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "bookmark created",
+     "A Short History of Lighthouses",
+     "position AY8AAAA:26850",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr"
+    ],
+    [
+     "2026-03-07T12:06:00.000+00:00",
+     "UTC, from the device clock",
+     "vocabulary database",
+     "word looked up",
+     "A Short History of Lighthouses",
+     "fathom | Soundings were logged in fathoms.",
+     "allocated",
+     "",
+     "system/vocabulary/vocab.db"
+    ],
+    [
+     "2026-03-07T12:09:48.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "highlight created",
+     "A Short History of Lighthouses",
+     "position AY8AAAA:27330",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr"
+    ],
+    [
+     "2026-03-07T12:40:00.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "reading position saved (lpr)",
+     "A Short History of Lighthouses",
+     "position AY8AAAA:27391",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr"
+    ],
+    [
+     "2026-03-16T12:31:05",
+     "device local time, no time zone",
+     "My Clippings.txt",
+     "highlight added to clippings",
+     "Notes on Contract Drafting",
+     "page 9 location 131-133 | Define the term once and use it the same way every time it appears.",
+     "allocated",
+     "",
+     "documents/My Clippings.txt entry 5"
+    ],
+    [
+     "2026-03-16T16:31:05.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "highlight created",
+     "Notes on Contract Drafting",
+     "position AX2AAAA:1965",
+     "allocated",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.sdr/Notes on Contract Drafting_B0SYNTH003.yjr"
+    ],
+    [
+     "2026-03-16T16:50:00.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "reading position saved (lpr)",
+     "Notes on Contract Drafting",
+     "position AX2AAAA:2010",
+     "allocated",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.sdr/Notes on Contract Drafting_B0SYNTH003.yjr"
+    ],
+    [
+     "2026-03-19T16:47:30",
+     "device local time, no time zone",
+     "My Clippings.txt",
+     "note added to clippings",
+     "Q3 operations review",
+     "page 4 | Ask finance for the source of the freight number.",
+     "allocated",
+     "",
+     "documents/My Clippings.txt entry 6"
+    ],
+    [
+     "2026-03-19T20:47:30.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "note created",
+     "Q3 operations review",
+     "position 4 0 0 0 | note: Ask finance for the source of the freight number.",
+     "allocated",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.sdr/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pds"
+    ],
+    [
+     "2026-03-19T21:05:00.000+00:00",
+     "UTC, from the device clock",
+     "sidecar",
+     "reading position saved (lpr)",
+     "Q3 operations review",
+     "position 6 0 0 0",
+     "allocated",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.sdr/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pds"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "deleted file: modified",
+     "Draft supplier terms",
+     "documents/Downloads/Items01/Draft_supplier_terms-cdeKey_11223344556677889900AABBCCDDEEFF.pdf",
+     "deleted, read back",
+     "documents/Downloads/Items01/Draft_supplier_terms-cdeKey_11223344556677889900AABBCCDDEEFF",
+     "deleted_entries.csv index 1"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "deleted file: modified",
+     "Harbour Pilot Manual",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004.sdr/Harbour Pilot Manual_B0SYNTH004.yjr",
+     "deleted, read back",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     "deleted_entries.csv index 3"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "deleted folder: modified",
+     "Harbour Pilot Manual",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004.sdr",
+     "deleted",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     "deleted_entries.csv index 2"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "A Short History of Lighthouses",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.kfx",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "A Short History of Lighthouses",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "Notes on Contract Drafting",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.kfx",
+     "allocated",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "Notes on Contract Drafting",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.sdr/Notes on Contract Drafting_B0SYNTH003.yjr",
+     "allocated",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "Q3 operations review",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pdf",
+     "allocated",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "Q3 operations review",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.sdr/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pds",
+     "allocated",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "Tidewater Engineering Handbook",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.kfx",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "Tidewater Engineering Handbook",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "documents/My Clippings.txt",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/version.txt",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:20",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file modified",
+     "",
+     "system/vocabulary/vocab.db",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "deleted file: created",
+     "Draft supplier terms",
+     "documents/Downloads/Items01/Draft_supplier_terms-cdeKey_11223344556677889900AABBCCDDEEFF.pdf",
+     "deleted, read back",
+     "documents/Downloads/Items01/Draft_supplier_terms-cdeKey_11223344556677889900AABBCCDDEEFF",
+     "deleted_entries.csv index 1"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "deleted file: created",
+     "Harbour Pilot Manual",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004.sdr/Harbour Pilot Manual_B0SYNTH004.yjr",
+     "deleted, read back",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     "deleted_entries.csv index 3"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "deleted folder: created",
+     "Harbour Pilot Manual",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004.sdr",
+     "deleted",
+     "documents/Downloads/Items01/Harbour Pilot Manual_B0SYNTH004",
+     "deleted_entries.csv index 2"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "A Short History of Lighthouses",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.kfx",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "A Short History of Lighthouses",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002.sdr/A Short History of Lighthouses_B0SYNTH002.yjr",
+     "allocated",
+     "documents/Downloads/Items01/A Short History of Lighthouses_B0SYNTH002",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "Notes on Contract Drafting",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.kfx",
+     "allocated",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "Notes on Contract Drafting",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003.sdr/Notes on Contract Drafting_B0SYNTH003.yjr",
+     "allocated",
+     "documents/Downloads/Items01/Notes on Contract Drafting_B0SYNTH003",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "Q3 operations review",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pdf",
+     "allocated",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "Q3 operations review",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.sdr/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9.pds",
+     "allocated",
+     "documents/Downloads/Items01/Q3_operations_review-cdeKey_0A1B2C3D4E5F60718293A4B5C6D7E8F9",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "Tidewater Engineering Handbook",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.kfx",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "Tidewater Engineering Handbook",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001.sdr/Tidewater Engineering Handbook_B0SYNTH001.yjr",
+     "allocated",
+     "documents/Downloads/Items01/Tidewater Engineering Handbook_B0SYNTH001",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "documents/My Clippings.txt",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/version.txt",
+     "allocated",
+     "",
+     "manifest.csv"
+    ],
+    [
+     "2026-11-15T04:13:21",
+     "FAT time as stored, no time zone",
+     "file system",
+     "file created",
+     "",
+     "system/vocabulary/vocab.db",
+     "allocated",
+     "",
+     "manifest.csv"
     ]
    ]
   },

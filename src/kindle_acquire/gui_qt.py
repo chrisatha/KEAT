@@ -204,11 +204,12 @@ class Window(QtWidgets.QMainWindow):
         self.page_files = self._menu_page([
             ("Extract from Image", "Read the FAT32 file system inside a raw image.\n"
              "Lists deleted entries and reads back what it can.", self.extract, False),
-            ("Parse Acquisition", "Highlights, notes, reading positions, lookups and\n"
-             "loaded documents into SQLite and CSV.", self.parse, False),
+            ("Parse Acquisition", "Highlights, notes, documents, a timeline and an\n"
+             "examiner report, as SQLite, CSV and HTML.", self.parse, False),
             ("Verify Acquisition", "Re-hash an acquisition folder against\n"
              "its own records.", self.verify, False),
-            ("View Results", "Browse the tables of a parsed acquisition.",
+            ("View Results", "Browse the tables of a parsed acquisition\n"
+             "and open its examiner report.",
              self._open_results, False),
             ("Compare\nAcquisitions", "Compare the records of two acquisitions: files added,\n"
              "removed or changed, and times that differ.", self.compare, False),
@@ -499,6 +500,7 @@ class Window(QtWidgets.QMainWindow):
         bar.addWidget(self.table_pick)
         bar.addWidget(self.filter_box, 1)
         bar.addWidget(self.row_count)
+        bar.addWidget(_small("Open Report", self._open_report))
         layout.addLayout(bar)
         self.results_path = _label("No results loaded. Run Parse, or open a parsed folder.", "hint")
         layout.addWidget(self.results_path)
@@ -807,6 +809,15 @@ class Window(QtWidgets.QMainWindow):
         if self.results_db:
             self._show(self.page_results)
 
+    def _open_report(self):
+        if not self.results_db:
+            self._warn("Open a parsed folder first.")
+            return
+        try:
+            jobs.open_report(os.path.dirname(self.results_db))
+        except (ValueError, OSError) as exc:
+            self._warn(str(exc))
+
     def _pick_results(self):
         folder = self._ask_folder("Parsed folder, or an acquisition folder that holds one")
         if folder:
@@ -839,7 +850,7 @@ class Window(QtWidgets.QMainWindow):
             self.table_pick.addItem("%s  (%d)" % (name, count), name)
         self.table_pick.blockSignals(False)
         preferred = [i for i, (name, count) in enumerate(tables)
-                     if name == "annotations" and count]
+                     if name == "device_summary" and count]
         first_filled = [i for i, (_n, count) in enumerate(tables) if count]
         self.table_pick.setCurrentIndex((preferred or first_filled or [0])[0])
         self._load_table()

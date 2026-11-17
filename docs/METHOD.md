@@ -149,6 +149,58 @@ The tool reads the first bytes of each content file to name its container.
 A KFX file that begins with the bytes `EA 44 52 4D 49 4F 4E EE` is reported
 as DRM-protected. The tool does nothing further with it.
 
+## Analysis tables
+
+`parse` builds six tables from the rows it has already parsed. They read
+no file and add no fact. Each row names the record it came from.
+
+### Timeline and time bases
+
+The timeline holds four kinds of time and names the kind in `time_basis`:
+
+- UTC from the device clock: millisecond values in sidecar files and
+  device databases.
+- Device local time: `My Clippings.txt`.
+- Device local date: the day rows of the reading statistics.
+- FAT time as stored: created and modified times of live and deleted
+  directory entries. The tested device writes these in UTC.
+
+Rows are sorted by the time as written. A clipping made at 21:14 device
+local time sorts before the sidecar annotation of the same event at 02:14
+UTC the next day. The order across bases is true only after the offset is
+applied.
+
+### Device clock offset
+
+A highlight, note or bookmark writes two records: a clipping with device
+local time and a sidecar annotation with UTC. The tool pairs a clipping
+with an annotation of the same kind when the two times differ by a
+multiple of 15 minutes, to within two seconds, between UTC-12:00 and
+UTC+14:00. It prefers a pair whose titles agree. It accepts a pair whose
+titles differ only when one annotation fits.
+
+On the test device all six clippings were paired on title, kind and time.
+Five clippings gave one offset. The sixth, made after the autumn clock
+change, gave an offset one hour lower.
+
+The offset is the device's time zone setting at that moment. It does not
+show that the device clock was correct.
+
+### Documents and titles
+
+A title comes from the device's reading statistics or vocabulary database
+when the ASIN in the file name is listed there, else from the file name.
+`title_source` says which. Deleted files under an `assets` folder are a
+book's own resource files and get no row.
+
+### Model from the serial number
+
+Characters four to six of the serial number identify the model on recent
+devices. The tool's list covers four models and comes from community
+device lists. The test device's code is `1PX`, listed as the Paperwhite
+11th generation. This has not been checked against the label on the
+device.
+
 ## My Clippings.txt
 
 The device appends to this file. In the test data it held two bookmark

@@ -35,6 +35,9 @@ GOLDEN = Path(__file__).resolve().parent / "golden" / "synthetic_kindle.json"
 # SQLite writes its own version into a database file, so the bytes of
 # vocab.db differ between Python builds. Its hash and size are left out.
 VARIABLE_FILES = ("system/vocabulary/vocab.db",)
+# Rows of device_summary that change with the run, the version or vocab.db.
+VARIABLE_ITEMS = ("started (UTC)", "finished (UTC)", "tool version",
+                  "parsed with tool version", "manifest SHA-256", "source image SHA-256")
 
 
 def snapshot(out):
@@ -59,6 +62,8 @@ def snapshot(out):
                 for key in ("sha256", "md5", "size"):
                     if key in record:
                         row[columns.index(key)] = "<varies>"
+            if name == "device_summary" and record["item"] in VARIABLE_ITEMS:
+                row[columns.index("value")] = "<varies>"
         tables[name] = {"columns": columns, "rows": rows}
     con.close()
     return {"manifest": manifest, "deleted_entries": deleted, "tables": tables}
@@ -106,6 +111,100 @@ class SyntheticKindle(unittest.TestCase):
                              expected["tables"][name]["rows"], name)
         self.assertEqual(actual["manifest"], expected["manifest"])
         self.assertEqual(actual["deleted_entries"], expected["deleted_entries"])
+
+    def _rows(self, sql):
+        con = sqlite3.connect(str(self.out / "parsed" / "kindle_parsed.db"))
+        try:
+            return con.execute(sql).fetchall()
+        finally:
+            con.close()
+
+    def test_clock_offsets_follow_the_clippings(self):
+        # Clippings before the March clock change sit five hours behind UTC,
+        # the later ones four.
+        offsets = self._rows("SELECT clipping_entry, offset_minutes, matched_on "
+                             "FROM clock_offsets ORDER BY clipping_entry")
+        self.assertEqual([(e, m) for e, m, _ in offsets],
+                         [(1, -300), (2, -300), (3, -300), (4, -300), (5, -240), (6, -240)])
+        self.assertEqual(set(basis for _e, _m, basis in offsets), {"title, kind and time"})
+
+    def test_documents_table_states(self):
+        states = dict(self._rows("SELECT title, state FROM documents"))
+        self.assertEqual(states["Q3 operations review"], "file present")
+        self.assertEqual(states["Draft supplier terms"], "deleted entry, read back")
+        self.assertEqual(states["Harbour Pilot Manual"], "deleted sidecar only")
+        row = self._rows("SELECT kind, protected, highlights, notes, clippings, lookups, "
+                         "authors FROM documents WHERE asin = 'B0SYNTH001'")[0]
+        self.assertEqual(row, ("store book", "yes", 2, 1, 2, 2, "Okafor, Dana"))
+
+    def test_timeline_is_ordered_and_sourced(self):
+        rows = self._rows("SELECT time, time_basis, record FROM timeline ORDER BY rowid")
+        self.assertEqual([r[0][:19] for r in rows], sorted(r[0][:19] for r in rows))
+        self.assertTrue(all(basis and record for _t, basis, record in rows))
+        events = self._rows("SELECT COUNT(*) FROM timeline WHERE source = 'sidecar' "
+                            "AND file_state = 'deleted, read back'")[0][0]
+        self.assertEqual(events, 3)
+        total = self._rows("SELECT SUM(total) FROM activity_by_day")[0][0]
+        self.assertEqual(total, len(rows))
+
+    def test_observations(self):
+        checks = [r[0] for r in self._rows('SELECT "check" FROM observations')]
+        for wanted in ("deleted document entry", "deleted sidecar, no content file",
+                       "sidecar annotation with no clipping made in the same second"):
+            self.assertIn(wanted, checks)
+        self.assertNotIn("time later than the acquisition", checks)
+
+    def test_examiner_report(self):
+        report = self.out / "parsed" / "report.html"
+        text = report.read_text(encoding="utf-8")
+        for wanted in ("Kindle examination record", "Tidewater Engineering Handbook",
+                       "Ask finance for the source of the freight number.", "UTC-05:00",
+                       "Draft supplier terms"):
+            self.assertIn(wanted, text)
+        self.assertNotIn("<script", text.lower())
+        self.assertNotIn("http", text.replace("data:image", ""))
+        recorded = (self.out / "parsed" / "report.html.sha256").read_text().split()[0]
+        self.assertEqual(recorded, hashlib.sha256(report.read_bytes()).hexdigest())
+
+    def test_report_escapes_device_text(self):
+        from kindle_acquire.examiner import write_report
+        copy = self.tmp / "hostile_parsed"
+        copy.mkdir()
+        shutil.copy(self.out / "parsed" / "kindle_parsed.db", copy / "kindle_parsed.db")
+        hostile = '<script>alert(1)</script><img src=x onerror="x">'
+        con = sqlite3.connect(str(copy / "kindle_parsed.db"))
+        con.execute("UPDATE clippings SET title = ?, text = ?", (hostile, hostile))
+        con.execute("UPDATE documents SET title = ?, authors = ?", (hostile, hostile))
+        con.execute("UPDATE annotations SET note = ?", (hostile,))
+        con.execute("UPDATE timeline SET detail = ?, title = ?", (hostile, hostile))
+        con.execute("UPDATE device_summary SET value = ?", (hostile,))
+        con.execute("UPDATE observations SET item = ?", (hostile,))
+        con.commit()
+        con.close()
+        text = Path(write_report(copy)).read_text(encoding="utf-8")
+        self.assertNotIn("<script", text)
+        self.assertNotIn("<img src=x", text)
+        self.assertIn("&lt;script&gt;alert(1)", text)
+
+    def test_report_needs_the_analysis_tables(self):
+        from kindle_acquire.examiner import write_report
+        old = self.tmp / "old_parsed"
+        old.mkdir()
+        con = sqlite3.connect(str(old / "kindle_parsed.db"))
+        con.execute("CREATE TABLE annotations (book_key)")
+        con.commit()
+        con.close()
+        with self.assertRaises(ValueError):
+            write_report(old)
+        with self.assertRaises(ValueError):
+            write_report(self.tmp / "no_such_folder")
+
+    def test_model_from_serial(self):
+        from kindle_acquire.analysis import model_from_serial
+        self.assertIn("Paperwhite, 11th", model_from_serial("G001PX0000000000"))
+        self.assertEqual(model_from_serial("G00ZZZ0000000000"), "")
+        self.assertEqual(model_from_serial("B024"), "")
+        self.assertEqual(model_from_serial(None), "")
 
     def test_second_extraction_compares_equal(self):
         second = self.tmp / "extract_again"
